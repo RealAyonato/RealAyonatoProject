@@ -16,30 +16,83 @@
 <meta name="twitter:title" content="@yield('meta_title', 'RealAyonato — Roblox Visual Portfolio')">
 <meta name="twitter:description" content="@yield('meta_description', 'Explore my official portfolio featuring GFX designs, Roblox UI interfaces, and visual arts.')">
 <meta name="twitter:image" content="@yield('meta_image', 'https://i.postimg.cc/qqJzc822/logo.webp')">
+
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --red: #dc2626; --red-glow: rgba(220, 38, 38, 0.25); --bg: #0a0a0a; --g950: #080808; 
+    --red: #dc2626; --red-glow: rgba(220, 38, 38, 0.4); --bg: #0a0a0a; --g950: #080808; 
     --g900: #111111; --g800: #1a1a1a; --g700: #252525; --g500: #6b7280; --g400: #9ca3af; 
     --g300: #d1d5db; --white: #ffffff; 
     --fd: 'Bebas Neue', sans-serif; --fb: 'Nunito', sans-serif; 
-    --transition: 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    --transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   }
-  html { scroll-behavior: smooth; }
+  
+  html { 
+    scroll-behavior: auto !important;
+    height: 100%;
+  }
+  
   body { 
     background: var(--bg); color: var(--white); font-family: var(--fb); line-height: 1.6; overflow-x: hidden; 
-    background-image: radial-gradient(circle at 75% 35%, rgba(220,38,38,0.04) 0%, transparent 55%);
+    background-image: radial-gradient(circle at 75% 35%, rgba(220,38,38,0.05) 0%, transparent 55%);
     background-attachment: fixed;
+    height: 100%;
   }
   body::before {
     content: ''; position: fixed; inset: 0; opacity: 0.025; pointer-events: none; z-index: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: #000; }
-  ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+
+  /* إخفاء شريط المتصفح الافتراضي */
+  html::-webkit-scrollbar, body::-webkit-scrollbar {
+    display: none;
+    width: 0 !important;
+  }
+  html, body {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  /* منطقة الاستشعار الخلفية - ممتدة تماماً لأقصى اليمين وبدون أي فراغات */
+  .custom-scrollbar-track {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 100%;
+    background: transparent;
+    z-index: 999999;
+    user-select: none;
+  }
+  
+  /* مقبض الشريط المخصص - ملتصق تماماً بالحافة اليمنى 0 بكسل */
+  .custom-scrollbar-thumb {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 50px; 
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 4px 0 0 4px; /* انحناء جهة اليسار فقط ليبقى ملتصقاً باليمين */
+    cursor: pointer;
+    will-change: transform, height;
+    transition: width 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  /* تأثير التوهج المضيء الفخم عند التفاعل */
+  .custom-scrollbar-track:hover .custom-scrollbar-thumb, .custom-scrollbar-track.dragging .custom-scrollbar-thumb {
+    width: 10px;
+    background-color: var(--red);
+    box-shadow: -2px 0 12px var(--red-glow), 0 0 8px var(--red);
+  }
+
+  body.user-is-dragging-scroll {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    cursor: grabbing !important;
+  }
 
   /* Loading Screen */
   #loading { position: fixed; inset: 0; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.55s ease; }
@@ -52,10 +105,9 @@
   @keyframes ldBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
   /* Top Header */
-  .top-header { padding: 24px 0 0; position: relative; z-index: 10; }
+  .top-header { padding: 24px 0; position: relative; z-index: 100; background: linear-gradient(to bottom, rgba(10,10,10,0.8), transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); position: sticky; top: 0; }
   .top-header-in { display: flex; justify-content: space-between; align-items: center; width: 100%; }
   
-  /* زر العودة للرئيسية */
   .who-am-i-btn { 
     display: inline-flex;
     align-items: center;
@@ -73,97 +125,102 @@
   .who-am-i-btn:hover { color: var(--red); text-shadow: 0 0 8px var(--red-glow); }
   .who-am-i-btn:hover span { transform: translateX(6px); }
 
-  /* قائمة التصفح العلوية على اليمين */
   .top-nav-links {
     display: flex;
     align-items: center;
-    gap: 22px; 
+    gap: 24px; 
     margin-left: auto;
   }
-
   .top-nav-links a {
     font-size: 0.85rem; 
     font-weight: 800; 
     text-transform: uppercase; 
     letter-spacing: 0.12em; 
     text-decoration: none; 
-    color: var(--white); 
-    transition: color 0.2s ease, text-shadow 0.2s ease;
+    color: var(--g400); 
+    transition: all var(--transition);
+    position: relative;
+    padding: 6px 0;
   }
-  .top-nav-links a:hover { color: var(--red); }
-  .top-nav-links a.active-page { color: var(--red) !important; text-shadow: 0 0 8px var(--red-glow); }
+  .top-nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--red);
+    box-shadow: 0 0 8px var(--red);
+    transition: all var(--transition);
+    transform: translateX(-50%);
+  }
+  .top-nav-links a:hover { color: var(--white); }
+  .top-nav-links a.active-page { color: var(--white) !important; font-weight: 900; }
+  .top-nav-links a.active-page::after, .top-nav-links a:hover::after { width: 100%; }
 
   /* Floating Icons */
-  .bg-icon { position: fixed; pointer-events: none; z-index: 0; color: transparent; -webkit-text-stroke: 1.5px rgba(220,38,38,0.35); animation: floatEmj var(--dur, 16s) var(--delay, 0s) infinite ease-in-out; }
+  .bg-icon { position: fixed; pointer-events: none; z-index: 0; color: transparent; -webkit-text-stroke: 1.5px rgba(220,38,38,0.2); animation: floatEmj var(--dur, 16s) var(--delay, 0s) infinite ease-in-out; }
   @keyframes floatEmj { 0% { transform: translateY(0px) rotate(-8deg); } 25% { transform: translateY(-30px) rotate(5deg); } 50% { transform: translateY(-52px) rotate(-4deg); } 75% { transform: translateY(-24px) rotate(7deg); } 100% { transform: translateY(0px) rotate(-8deg); } }
 
   /* Global Section Styles */
   .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
-  .section { padding: 50px 0 70px; position: relative; z-index: 1; }
-  .sdark { background: rgba(7, 7, 7, 0.45); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .section { padding: 60px 0 90px; position: relative; z-index: 1; }
+  .sdark { background: rgba(11, 11, 11, 0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.03); }
   
   .badge { display: inline-flex; align-items: center; gap: 8px; color: var(--red); margin-bottom: 14px; }
-  .bdl { width: 44px; height: 2px; background: var(--red); }
-  .bt { font-size: 10px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; }
-  .stitle { font-family: var(--fd); font-size: clamp(2.8rem, 6vw, 4.8rem); line-height: 1; letter-spacing: 0.02em; margin-bottom: 14px; }
-  .stitle span { color: var(--red); }
-  .ssub { color: var(--g400); font-size: 1rem; max-width: 580px; margin: 0 auto; line-height: 1.75; }
-  .sheader { text-align: center; margin-bottom: 40px; }
+  .bdl { width: 32px; height: 2px; background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .bt { font-size: 11px; font-weight: 900; letter-spacing: 0.25em; text-transform: uppercase; }
+  .stitle { font-family: var(--fd); font-size: clamp(3rem, 7vw, 5rem); line-height: 1; letter-spacing: 0.02em; margin-bottom: 16px; text-transform: uppercase; }
+  .stitle span { color: var(--red); text-shadow: 0 0 20px rgba(220, 38, 38, 0.2); }
+  .ssub { color: var(--g400); font-size: 1.05rem; max-width: 600px; margin: 0 auto 40px; line-height: 1.8; }
+  .sheader { text-align: center; margin-bottom: 50px; }
 
-  /* Buttons & Cards */
-  .card { background: rgba(17, 17, 17, 0.7); backdrop-filter: blur(4px); border: 1px solid var(--g800); border-radius: 12px; transition: border-color var(--transition); }
-  .card:hover { border-color: rgba(220, 38, 38, 0.35); }
-  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; transition: all var(--transition); cursor: pointer; border: none; font-family: inherit; text-decoration: none; }
-  .btnp { background: var(--red); color: #fff; }
-  .btnp:hover { background: #ef4444; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(220,38,38,0.3); }
-  .btno { border: 1px solid rgba(255, 255, 255, 0.18); color: #fff; }
-  .btno:hover { border-color: var(--red); color: var(--red); }
-  .soc-ic { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--g700); display: inline-flex; align-items: center; justify-content: center; color: var(--g400); transition: all var(--transition); text-decoration: none; }
-  .soc-ic:hover { border-color: var(--red); color: var(--red); }
-
-  /* Footer Styling */
-  footer { padding: 48px 0; border-top: 1px solid rgba(255,255,255,0.05); background: var(--g950); position: relative; z-index: 10; }
-  .foot-in { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+  .card { background: rgba(17, 17, 17, 0.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--g800); border-radius: 16px; transition: all var(--transition); }
+  .card:hover { border-color: rgba(220, 38, 38, 0.4); background: rgba(20, 20, 20, 0.6); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
   
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 28px; border-radius: 30px; font-weight: 800; font-size: 0.9rem; transition: all var(--transition); cursor: pointer; border: none; font-family: inherit; text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; }
+  .btnp { background: var(--red); color: #fff; box-shadow: 0 4px 15px rgba(220,38,38,0.2); }
+  .btnp:hover { background: #ef4444; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(220,38,38,0.45); }
+  .btno { border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; background: transparent; }
+  .btno:hover { border-color: var(--red); color: var(--white); background: rgba(220,38,38,0.08); box-shadow: 0 0 15px var(--red-glow); transform: translateY(-2px); }
+  
+  .soc-ic { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--g700); display: inline-flex; align-items: center; justify-content: center; color: var(--g400); transition: all var(--transition); text-decoration: none; }
+  .soc-ic:hover { border-color: var(--red); color: var(--white); background: var(--red); transform: translateY(-3px); box-shadow: 0 5px 15px var(--red-glow); }
+
+  footer { padding: 50px 0; border-top: 1px solid rgba(255,255,255,0.03); background: var(--g950); position: relative; z-index: 10; }
+  .foot-in { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
   .foot-logo-link { text-decoration: none; color: inherit; display: inline-block; }
   .foot-logo-link:hover { opacity: 0.9; }
-  
-  .foot-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; letter-spacing: 0.03em; }
-  .foot-logo img { border-radius: 50%; }
-  .foot-logo span.art-brand { color: var(--red); margin-left: 0; padding-left: 0; } 
-  
-  .foot-copy { color: var(--g500); font-size: 0.78rem; }
-  .foot-socs { display: flex; gap: 14px; align-items: center; }
-  .foot-soc { color: var(--g500); font-size: 1.2rem; transition: color 0.2s, transform 0.2s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
-  
-  /* الهوفر الأحمر الموحد للسوشيال ميديا */
-  .foot-soc:hover { color: var(--red) !important; transform: translateY(-2px); }
-  .foot-soc:hover svg { transform: translateY(-1px) rotate(-5deg); transition: transform 0.2s ease; }
+  .foot-logo { display: flex; align-items: center; gap: 10px; font-weight: 900; letter-spacing: 0.03em; font-size: 1.1rem; }
+  .foot-logo img { border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
+  .foot-logo span.art-brand { color: var(--red); text-shadow: 0 0 8px var(--red-glow); } 
+  .foot-copy { color: var(--g500); font-size: 0.82rem; font-weight: 500; }
+  .foot-socs { display: flex; gap: 16px; align-items: center; }
+  .foot-soc { color: var(--g400); font-size: 1.25rem; transition: all 0.25s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+  .foot-soc:hover { color: var(--white) !important; transform: translateY(-3px) scale(1.1); filter: drop-shadow(0 0 5px var(--red)); }
 
   @media (max-width: 768px) {
-    .top-header-in { flex-direction: column; gap: 15px; text-align: center; }
-    .top-nav-links { margin: 0 auto; gap: 14px; flex-wrap: wrap; justify-content: center; }
+    .top-header { position: relative; padding: 16px 0; }
+    .top-header-in { flex-direction: column; gap: 18px; text-align: center; }
+    .top-nav-links { margin: 0 auto; gap: 16px; flex-wrap: wrap; justify-content: center; }
     .foot-in { flex-direction: column; text-align: center; gap: 24px; }
+    .custom-scrollbar-track { display: none !important; } 
   }
 </style>
 @stack('styles')
 </head>
 <body>
 
+{{-- شريط التمرير المخصص المحاذي 100% لأقصى يمين الشاشة --}}
+<div class="custom-scrollbar-track" id="scrollTrack">
+  <div class="custom-scrollbar-thumb" id="scrollThumb"></div>
+</div>
+
 <div id="loading">
   <img class="ld-logo" src="https://i.postimg.cc/qqJzc822/logo.webp" alt="logo">
   <div id="ld-word"><span class="ld-cursor-bar"></span></div>
   <div class="ld-dot">.art</div>
 </div>
-
-@hasSection('bg_icons')
-  @yield('bg_icons')
-@else
-  <i class="bg-icon fas fa-gamepad" style="left:5%;top:10%;--dur:14s;font-size:72px"></i>
-  <i class="bg-icon fas fa-paint-brush" style="left:86%;top:14%;--dur:18s;--delay:2s;font-size:64px"></i>
-  <i class="bg-icon fas fa-star" style="left:3%;top:55%;--dur:12s;--delay:5s;font-size:56px"></i>
-  <i class="bg-icon fas fa-magic" style="left:44%;top:5%;--dur:15s;--delay:7s;font-size:68px"></i>
-@endif
 
 @if(request()->path() !== '/' && request()->path() !== '')
 <div class="top-header">
@@ -191,31 +248,22 @@
 <footer>
   <div class="container">
     <div class="foot-in">
-      
       <a href="{{ url('/') }}" class="foot-logo-link" id="foot-brand-trigger">
         <div class="foot-logo">
           <img src="https://i.postimg.cc/qqJzc822/logo.webp" width="38" height="38" alt="logo">
           RealAyonato<span class="art-brand">.art</span>
         </div>
       </a>
-      
       <div>
         <p class="foot-copy">© <span id="yr"></span> RealAyonato. All rights reserved.</p>
       </div>
-      
       <div class="foot-socs">
         <a href="https://discord.gg/HC2xDx3FyN" target="_blank" class="foot-soc" aria-label="Discord"><i class="fab fa-discord"></i></a>
         <a href="https://www.instagram.com/realayonato/" target="_blank" class="foot-soc" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="https://x.com/RealAyonato" target="_blank" class="foot-soc" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
         <a href="https://www.youtube.com/@RealAyonato" target="_blank" class="foot-soc" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         <a href="https://www.tiktok.com/@realayonato_" target="_blank" class="foot-soc" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-        <a href="https://www.roblox.com/users/4266567536/profile" target="_blank" class="foot-soc" aria-label="Roblox">
-          <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor">
-            <path d="M5.126 0L0 18.874 18.874 24 24 5.126 5.126 0zm7.143 14.225l-2.482-.665.665-2.482 2.482.665-.665 2.482z"/>
-          </svg>
-        </a>
       </div>
-      
     </div>
   </div>
 </footer>
@@ -230,8 +278,9 @@
     
     function addChar() {
       if (idx >= nameChars.length) {
-        document.querySelector('.ld-dot').style.opacity = '1';
-        setTimeout(() => { if(ld) ld.classList.add('gone'); setTimeout(() => { if(ld) ld.remove(); }, 500); }, 400);
+        const dot = document.querySelector('.ld-dot');
+        if(dot) dot.style.opacity = '1';
+        setTimeout(() => { if(ld) ld.classList.add('gone'); setTimeout(() => { if(ld) ld.remove(); }, 550); }, 400);
         return;
       }
       if(wordDiv && cursor) {
@@ -244,28 +293,94 @@
       setTimeout(addChar, 80);
     }
     addChar();
-    setTimeout(() => { if(ld && ld.parentNode) ld.remove(); }, 4000);
     document.getElementById('yr').textContent = new Date().getFullYear();
+  })();
 
-    // منع القائمة المنبثقة للزر الأيمن للفأرة لحماية التصاميم
-    document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
+  // محرك التمرير عالي الحساسية والاستجابة من الحافة الفورية 0px
+  document.addEventListener("DOMContentLoaded", () => {
+    const track = document.getElementById("scrollTrack");
+    const thumb = document.getElementById("scrollThumb");
+    if (!track || !thumb) return;
+
+    let isDragging = false;
+    let startY = 0;
+    let startScrollTop = 0;
+    let ticked = false;
+
+    function updateScrollbar() {
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+      const thumbHeight = Math.max((windowHeight / docHeight) * windowHeight, 60);
+      thumb.style.height = `${thumbHeight}px`;
+
+      const maxTrackTop = windowHeight - thumbHeight;
+      const maxScrollTop = docHeight - windowHeight;
+      
+      if (maxScrollTop > 0) {
+        const thumbTop = (scrollTop / maxScrollTop) * maxTrackTop;
+        thumb.style.transform = `translate3d(0, ${thumbTop}px, 0)`;
+        track.style.display = "block";
+      } else {
+        track.style.display = "none";
+      }
+      ticked = false;
+    }
+
+    function requestTick() {
+      if (!ticked) {
+        requestAnimationFrame(updateScrollbar);
+        ticked = true;
+      }
+    }
+
+    // تفعيل الضغط الفوري بمجرد النقر على النطاق الجانبي بالكامل
+    thumb.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      startY = e.clientY;
+      startScrollTop = window.scrollY || document.documentElement.scrollTop;
+
+      track.classList.add("dragging");
+      document.body.classList.add("user-is-dragging-scroll");
+      e.preventDefault(); 
     });
 
-    // كود التحكم الذكي برابط البراند في الفوتر (الصعود التدريجي للأعلى)
-    const brandTrigger = document.getElementById('foot-brand-trigger');
-    if (brandTrigger) {
-      brandTrigger.addEventListener('click', function(e) {
-        if (window.location.pathname === '/' || window.location.pathname === '') {
-          e.preventDefault();
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-          });
-        }
-      });
-    }
-  })();
+    window.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      const thumbHeight = thumb.offsetHeight;
+
+      const deltaY = e.clientY - startY;
+      const maxTrackTop = windowHeight - thumbHeight;
+      const maxScrollTop = docHeight - windowHeight;
+
+      const currentThumbTop = ((startScrollTop / maxScrollTop) * maxTrackTop) + deltaY;
+      const safeThumbTop = Math.max(0, Math.min(currentThumbTop, maxTrackTop));
+
+      const targetScrollTop = (safeThumbTop / maxTrackTop) * maxScrollTop;
+      
+      window.scrollTo(0, targetScrollTop);
+    });
+
+    window.addEventListener("mouseup", () => {
+      if (isDragging) {
+        isDragging = false;
+        track.classList.remove("dragging");
+        document.body.classList.remove("user-is-dragging-scroll");
+      }
+    });
+
+    window.addEventListener("scroll", requestTick, { passive: true });
+    window.addEventListener("resize", requestTick, { passive: true });
+    
+    const resizeObserver = new ResizeObserver(() => requestTick());
+    resizeObserver.observe(document.body);
+
+    requestTick();
+  });
 </script>
 @stack('scripts')
 </body>

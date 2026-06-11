@@ -24,7 +24,7 @@
   .hero-grid { 
     display: grid; 
     grid-template-columns: 1.15fr 0.85fr; 
-    gap: 80px; 
+    gap: 60px; 
     align-items: center; 
     width: 100%; 
   }
@@ -35,8 +35,10 @@
     line-height: 1.15; 
     margin-bottom: 24px; 
     letter-spacing: -0.01em;
+    color: #fff;
   }
   
+  /* تحسين تأثير الجليتش لمنع اهتزاز وكسر النصوص */
   .glitch {
     font-family: 'Arial Black', sans-serif;
     color: #ff4d4d; 
@@ -50,7 +52,7 @@
     content: attr(data-text);
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    white-space: pre;
+    white-space: nowrap;
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
     opacity: 0;
@@ -70,31 +72,31 @@
 
   @keyframes slowBodyShake {
     0%, 95%, 100% { transform: translate(0, 0) skew(0deg); }
-    96% { transform: translate(-3px, 1px) skew(-1deg); }
-    98% { transform: translate(3px, -1px) skew(1deg); }
+    96% { transform: translate(-2px, 1px) skew(-1deg); }
+    98% { transform: translate(2px, -1px) skew(1deg); }
   }
 
   @keyframes slowSliceTop {
     0%, 94%, 100% { transform: translate(0); opacity: 0; }
-    95% { transform: translate(-7px, -2px); opacity: 0.65; clip-path: inset(10% 0 60% 0); }
-    97% { transform: translate(6px, 1px); opacity: 0.65; clip-path: inset(25% 0 45% 0); }
+    95% { transform: translate(-5px, -1px); opacity: 0.65; clip-path: inset(10% 0 60% 0); }
+    97% { transform: translate(4px, 1px); opacity: 0.65; clip-path: inset(25% 0 45% 0); }
   }
 
   @keyframes slowSliceBottom {
     0%, 94%, 100% { transform: translate(0); opacity: 0; }
-    95% { transform: translate(6px, 2px); opacity: 0.65; clip-path: inset(60% 0 10% 0); }
-    97% { transform: translate(-6px, -1px); opacity: 0.65; clip-path: inset(45% 0 25% 0); }
+    95% { transform: translate(4px, 1px); opacity: 0.65; clip-path: inset(60% 0 10% 0); }
+    97% { transform: translate(-4px, -1px); opacity: 0.65; clip-path: inset(45% 0 25% 0); }
   }
   
   .hero-desc-box {
     background: linear-gradient(90deg, rgba(220, 38, 38, 0.04) 0%, rgba(0,0,0,0.2) 100%); 
     border-left: 3px solid var(--red); 
-    padding: 18px 22px; 
-    border-radius: 0 12px 12px 0; 
+    padding: 20px 24px; 
+    border-radius: 0 14px 14px 0; 
     text-align: left;
-    max-width: 520px;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    max-width: 540px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     border-top: 1px solid rgba(255,255,255,0.01);
     border-bottom: 1px solid rgba(255,255,255,0.01);
   }
@@ -102,11 +104,12 @@
   .hero-desc { 
     color: var(--g400); 
     margin-bottom: 0; 
-    font-size: 0.94rem; 
-    line-height: 1.65;
+    font-size: 0.96rem; 
+    line-height: 1.7;
     font-weight: 500;
   }
   
+  /* تنسيق الأزرار والمؤثرات التفاعلية حولها */
   .hero-btn-wrapper {
     position: relative;
     width: 100%;
@@ -114,7 +117,7 @@
     flex-direction: column; 
     align-items: center;
     gap: 16px;
-    margin-top: 50px; 
+    margin-top: 60px; 
   }
 
   .cartoon-badge {
@@ -134,7 +137,7 @@
 
   @keyframes badgeFloat {
     0%, 100% { transform: rotate(12deg) translateY(0); }
-    50% { transform: rotate(14deg) translateY(-5px); }
+    50% { transform: rotate(14deg) translateY(-6px); }
   }
 
   .drawing-arrow {
@@ -150,7 +153,7 @@
 
   .drawing-arrow path {
     stroke: #dc2626; 
-    stroke-width: 3.2;
+    stroke-width: 3.5;
     stroke-linecap: round;
     stroke-linejoin: round;
     fill: none;
@@ -161,7 +164,7 @@
 
   @keyframes arrowFloat {
     0%, 100% { transform: rotate(-5deg) translateY(0); }
-    50% { transform: rotate(-4deg) translateY(-5px); }
+    50% { transform: rotate(-4deg) translateY(-6px); }
   }
 
   @keyframes drawAndErase {
@@ -181,13 +184,14 @@
   }
   
   .hero-btn-group .btn, .hero-btn-single .btn {
-    padding: 14px 30px;
-    font-size: 0.9rem;
-    letter-spacing: 0.03em;
-    border-radius: 10px;
+    padding: 14px 32px;
+    font-size: 0.92rem;
+    letter-spacing: 0.04em;
+    border-radius: 12px;
     text-transform: none !important; 
-    font-weight: 500 !important; 
+    font-weight: 600 !important; 
     position: relative;
+    transition: all var(--transition);
   }
 
   .hero-btn-single {
@@ -196,6 +200,7 @@
     width: 100%;
   }
 
+  /* حاوية الـ Avatar والهالات المضيئة */
   .av-wrap { 
     display: flex; 
     justify-content: flex-end; 
@@ -205,10 +210,10 @@
   .av-wrap::before {
     content: '';
     position: absolute;
-    width: 280px;
-    height: 280px;
-    background: rgba(220, 38, 38, 0.12);
-    filter: blur(60px);
+    width: 300px;
+    height: 300px;
+    background: rgba(220, 38, 38, 0.15);
+    filter: blur(70px);
     border-radius: 50%;
     top: 50%;
     left: 50%;
@@ -223,26 +228,26 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    animation: heroLogoAnim 7s infinite ease-in-out; 
+    animation: heroLogoAnim 6s infinite ease-in-out; 
     will-change: transform; 
     z-index: 2;
   }
   
   @keyframes heroLogoAnim {
     0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
-    25% { transform: translateY(-10px) scale(1.02) rotate(2deg); }
-    50% { transform: translateY(-20px) scale(0.99) rotate(-1.5deg); }
-    75% { transform: translateY(-8px) scale(1.01) rotate(1deg); }
+    25% { transform: translateY(-12px) scale(1.01) rotate(1.5deg); }
+    50% { transform: translateY(-22px) scale(0.98) rotate(-1deg); }
+    75% { transform: translateY(-10px) scale(1.01) rotate(0.5deg); }
   }
   
   .av-ring { 
     width: 260px; 
     height: 260px; 
-    border-radius: 32px; 
-    border: 3px solid rgba(220,38,38,0.5); 
+    border-radius: 40px; 
+    border: 3px solid rgba(220,38,38,0.45); 
     overflow: hidden; 
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(220, 38, 38, 0.15); 
-    margin-bottom: 22px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.65), 0 0 35px rgba(220, 38, 38, 0.2); 
+    margin-bottom: 24px;
     background: var(--g900);
     position: relative;
     z-index: 2;
@@ -257,8 +262,8 @@
   
   .hero-dynamic-text { 
     font-family: var(--fb); 
-    font-size: 1.85rem; 
-    font-weight: 800;
+    font-size: 1.95rem; 
+    font-weight: 900;
     letter-spacing: 0.05em; 
     height: 2.8rem; 
     line-height: 2.8rem;
@@ -269,7 +274,7 @@
     position: relative;
     z-index: 2;
   }
-  .h-cursor-bar { display: inline-block; width: 3px; height: 0.7em; background: #dc2626; margin-left: 5px; vertical-align: middle; animation: hBlink 0.7s step-end infinite; }
+  .h-cursor-bar { display: inline-block; width: 3px; height: 0.75em; background: #dc2626; margin-left: 6px; vertical-align: middle; animation: hBlink 0.7s step-end infinite; }
   @keyframes hBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
   .sketch-arrow {
@@ -281,7 +286,6 @@
     transition: transform 0.2s ease;
   }
 
-  /* تم إبعاد الأسهم أكثر عن اللوجو وتسريع حركة التأشير والموجة لـ 1.8s */
   .arrow-top-left { top: -55px; left: -5px; animation: arrowMoveTL 1.8s infinite ease-in-out; }
   .arrow-top-right { top: -55px; right: -5px; transform: scaleX(-1); animation: arrowMoveTR 1.8s infinite ease-in-out; }
   .arrow-bottom-left { bottom: 25px; left: -5px; transform: scaleY(-1); animation: arrowMoveBL 1.8s infinite ease-in-out; }
@@ -304,12 +308,13 @@
     50% { transform: scale(-1) translate(8px, 8px); opacity: 1; }
   }
 
+  /* الريسبونسيف للشاشات المتوسطة والصغيرة */
   @media (max-width: 992px) { 
-    #home { height: auto; padding: 40px 0; }
-    .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; } 
+    #home { height: auto; padding: 60px 0; }
+    .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 45px; } 
     .av-wrap { justify-content: center; } 
     .av-con { width: 300px; }
-    .hero-desc-box { margin: 0 auto; border-radius: 12px; border-right: 1px solid rgba(255,255,255,0.02); text-align: center; }
+    .hero-desc-box { margin: 0 auto; border-radius: 12px; border-left: none; border-top: 3px solid var(--red); text-align: center; }
     .sketch-arrow, .cartoon-badge, .drawing-arrow { display: none; } 
     .hero-container { gap: 35px; }
   }
@@ -326,7 +331,7 @@
         <div>
           <h1 class="hero-title">
             Roblox Visuals<br>
-            <span class="glitch" data-text="That Stop&#10;The Scroll">That Stop<br>The Scroll</span>
+            <span class="glitch" data-text="That Stop The Scroll">That Stop<br>The Scroll</span>
           </h1>
           
           <div class="hero-desc-box">

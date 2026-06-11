@@ -16,36 +16,37 @@
     z-index: 2;
   }
 
-  /* حاوية الأسئلة الشائعة المتطورة - تم تقليل الفجوة لتناسب العدد الأكبر */
+  /* حاوية الأسئلة الشائعة */
   .faq-wrap { 
     max-width: 850px; 
     margin: 40px auto 60px; 
     display: flex; 
     flex-direction: column; 
-    gap: 14px; 
+    gap: 16px; 
   }
 
   /* تصميم الكارت الزجاجي العصري */
   .faq-card { 
     border: 1px solid rgba(255, 255, 255, 0.04) !important; 
-    border-radius: 14px !important; 
+    border-radius: 16px !important; 
     background: rgba(15, 15, 15, 0.6) !important; 
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     overflow: hidden; 
-    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); 
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; 
   }
 
   /* تأثير الهوفر قبل الضغط */
   .faq-card:hover {
-    border-color: rgba(220, 38, 38, 0.2) !important;
+    border-color: rgba(220, 38, 38, 0.25) !important;
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
   }
   
-  /* زر تفعيل السؤال - تم تقليل الحشو الرأسي ليكون مريحاً للعين مع كثرة الأسئلة */
+  /* زر تفعيل السؤال */
   .faq-trigger { 
     width: 100%; 
-    padding: 20px 28px; 
+    padding: 22px 30px; 
     background: none; 
     border: none; 
     text-align: left; 
@@ -58,7 +59,7 @@
     cursor: pointer; 
     font-family: var(--fb); 
     transition: color 0.3s ease;
-    gap: 15px;
+    gap: 20px;
   }
 
   .faq-card:hover .faq-trigger {
@@ -67,16 +68,16 @@
   
   /* تصميم دائرة الأيقونة المتنقلة */
   .faq-icon { 
-    width: 32px; 
-    height: 32px; 
+    width: 34px; 
+    height: 34px; 
     border-radius: 50%; 
     background: rgba(255, 255, 255, 0.03); 
     display: flex; 
     align-items: center; 
     justify-content: center; 
     border: 1px solid rgba(255, 255, 255, 0.08); 
-    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); 
-    font-size: 0.8rem; 
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease; 
+    font-size: 0.85rem; 
     color: var(--g400);
     flex-shrink: 0;
   }
@@ -86,22 +87,22 @@
     max-height: 0; 
     overflow: hidden; 
     transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-    background: rgba(8, 8, 8, 0.2); 
+    background: rgba(8, 8, 8, 0.15); 
   }
   
   .faq-inner { 
-    padding: 0 28px 24px; 
+    padding: 0 30px 24px; 
     color: var(--g400); 
-    font-size: 0.95rem; 
-    line-height: 1.7; 
+    font-size: 0.98rem; 
+    line-height: 1.75; 
     font-style: italic;
   }
   
   /* التنسيق النشط والكارت مفتوح */
   .faq-card.active { 
     border-color: rgba(220, 38, 38, 0.4) !important; 
-    background: rgba(20, 12, 12, 0.7) !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 15px rgba(220, 38, 38, 0.05);
+    background: rgba(20, 12, 12, 0.65) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(220, 38, 38, 0.08);
   }
 
   .faq-card.active .faq-trigger {
@@ -114,6 +115,13 @@
     transform: rotate(180deg); 
     color: #fff; 
     box-shadow: 0 0 12px var(--red-glow); 
+  }
+
+  /* ريسبونسيف للشاشات الصغيرة */
+  @media(max-width: 576px) {
+    .faq-trigger { padding: 18px 20px; font-size: 1rem; gap: 12px; }
+    .faq-inner { padding: 0 20px 20px; font-size: 0.92rem; }
+    .faq-icon { width: 30px; height: 30px; font-size: 0.75rem; }
   }
 </style>
 @endpush
@@ -136,7 +144,6 @@
 
 @push('scripts')
 <script>
-  // تم إصلاح الجافا سكريبت بإضافة الفواصل وعلامات النقطتين المفقودة بدقة
   const faqData = [
     { q: 'What exactly do you create?', a: 'I make Roblox thumbnails, GFX profile pictures, and channel banners — all built with 3D rendering and custom effects. Basically anything visual for your Roblox channel, I can build it.' },
     { q: 'How long will my order take?', a: 'Most orders are done within 6 to 48 hours. For bundles, I deliver each asset one by one so nothing feels rushed. Need it faster? Just mention your deadline when you order.' },
@@ -167,18 +174,23 @@
     
     wrap.appendChild(card);
     
-    card.querySelector('.faq-trigger').addEventListener('click', () => {
+    card.querySelector('.faq-trigger').addEventListener('click', function() {
       const isActive = card.classList.contains('active');
       
-      // إغلاق أي سؤال آخر مفتوح حالياً بسلاسة
+      // إغلاق أي كارت مفتوح مسبقاً بطريقة ناعمة وسلسة
       document.querySelectorAll('.faq-card').forEach(c => { 
-        c.classList.remove('active'); 
-        c.querySelector('.faq-content').style.maxHeight = null; 
+        if (c !== card) {
+          c.classList.remove('active'); 
+          c.querySelector('.faq-content').style.maxHeight = null; 
+        }
       });
       
-      // فتح السؤال الحالي إذا لم يكن نشطاً
-      if (!isActive) { 
-        card.classList.add('active'); 
+      // تبديل حالة الكارت الذي تم الضغط عليه حالياً
+      if (isActive) {
+        card.classList.remove('active');
+        card.querySelector('.faq-content').style.maxHeight = null;
+      } else {
+        card.classList.add('active');
         const content = card.querySelector('.faq-content'); 
         content.style.maxHeight = content.scrollHeight + "px"; 
       }

@@ -3,7 +3,7 @@
 
 @push('styles')
 <style>
-  /* ضمان شفافية الخلفية لظهور الإيموجيات */
+  /* ضمان شفافية الخلفية لظهور الإيموجيات المضيئة بالخلفية */
   .section.sdark {
     background: none !important;
     background-color: transparent !important;
@@ -14,16 +14,16 @@
     z-index: 2;
   }
 
-  /* إرجاع البادج العلوي للوضع الافتراضي المستقر بدون أي تحريك */
   .sheader .badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
   }
 
-  .filter-wrapper { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
-  .filter-btn { padding: 10px 22px; border-radius: 30px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--g400); font-weight: 700; cursor: pointer; transition: all var(--transition); font-size: 0.88rem; }
-  .filter-btn.active, .filter-btn:hover { background: var(--red); color: #fff; border-color: var(--red); box-shadow: 0 0 15px var(--red-glow); }
+  /* فلاتر على طريقة سبوتيفاي الاحترافية */
+  .filter-wrapper { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; }
+  .filter-btn { padding: 11px 24px; border-radius: 30px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: var(--g400); font-weight: 800; cursor: pointer; transition: all var(--transition); font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .filter-btn.active, .filter-btn:hover { background: var(--red); color: #fff; border-color: var(--red); box-shadow: 0 0 20px var(--red-glow); transform: scale(1.05); }
   
   /* الحاوية الرئيسية للشبكة */
   .portfolio-grid { 
@@ -31,75 +31,81 @@
     width: 100%;
     margin: 0 auto;
     min-height: 550px; 
-    transition: height 0.3s ease; 
+    transition: height 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
   }
 
-  /* تنسيق كروت الصور */
+  /* تنسيق كروت الصور التفاعلية */
   .portfolio-item { 
     position: absolute; 
     cursor: pointer; 
-    border-radius: 12px; 
+    border-radius: 14px; 
     overflow: hidden; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
     user-select: none;
     -webkit-user-drag: none;
-    background: transparent !important;
-    border: 2px solid transparent !important;
+    background: #111 !important;
+    border: 2px solid rgba(255,255,255,0.03) !important;
     padding: 0 !important;
     
     opacity: 0;
-    filter: blur(15px);
-    transform: scale(0.85);
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease, filter 0.4s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    filter: blur(10px);
+    transform: scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease, filter 0.35s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
 
+  /* عند تفعيل الظهور */
   .portfolio-item.show-pop {
     opacity: 1;
     filter: blur(0px);
     transform: scale(1);
   }
   
-  /* أوت لاين أحمر متوهج عند الهوفر */
+  /* أوفرلاي وتوهج أحمر فخم جداً عند تمرير الماوس */
   .portfolio-item:hover {
-    border-color: #ff0000 !important;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6), 0 10px 25px rgba(0,0,0,0.5);
+    border-color: var(--red) !important;
+    box-shadow: 0 0 25px rgba(220, 38, 38, 0.5), 0 15px 35px rgba(0,0,0,0.6);
   }
   
   .portfolio-item img { 
     width: 100%; 
     height: auto; 
     display: block; 
-    transition: transform 0.4s ease; 
+    transition: transform 0.5s ease; 
     pointer-events: none;
     -webkit-user-drag: none;
   }
+  
+  .portfolio-item:hover img {
+    transform: scale(1.03);
+  }
 
-  /* تثبيت مطلق آمن داخل إطار الصورة يمنع التشوه */
+  /* بادج للمشاريع الحصرية والجديدة */
   .badge-new {
     position: absolute;
-    bottom: 12px;
-    right: 12px;
-    background: #ff0000;
+    top: 14px;
+    left: 14px;
+    background: var(--red);
     color: #ffffff;
-    font-size: 0.78rem;
-    font-weight: 800;
+    font-size: 0.75rem;
+    font-weight: 900;
     padding: 4px 14px;
-    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.5);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.5);
     z-index: 5;
     border-radius: 30px; 
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     pointer-events: none;
   }
   
-  /* طبقة الهوفر بالأسفل */
+  /* طبقة الأوفرلاي التفاعلية السفلية */
   .portfolio-overlay { 
     position: absolute; 
     inset: 0; 
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%); 
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0) 100%); 
     display: flex; 
     flex-direction: column; 
     justify-content: flex-end; 
-    padding: 20px; 
+    padding: 24px; 
     opacity: 0; 
     transition: opacity 0.3s ease;
     z-index: 3;
@@ -108,25 +114,34 @@
   .portfolio-item:hover .portfolio-overlay { opacity: 1; }
   
   .item-cat { 
-    font-size: 0.9rem; 
-    font-weight: 800; 
+    font-size: 0.85rem; 
+    font-weight: 900; 
     text-transform: uppercase; 
-    color: #fff; 
-    letter-spacing: 1.5px; 
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8); 
-    transform: translateY(8px);
-    transition: transform 0.3s ease;
+    color: var(--red); 
+    letter-spacing: 2px; 
+    transform: translateY(10px);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   }
-  .portfolio-item:hover .item-cat { transform: translateY(0); }
+  .item-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 4px;
+    transform: translateY(10px);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1) 0.05s;
+  }
+  .portfolio-item:hover .item-cat,
+  .portfolio-item:hover .item-title { transform: translateY(0); }
 
   /* ------------------------------------------ */
-  /* المودال والبوب أب المطور (Lightbox) */
+  /* المودال والـ Lightbox المطور */
   /* ------------------------------------------ */
   .lightbox-modal { 
     position: fixed; 
     inset: 0; 
-    background: rgba(4,4,4,0.92); 
-    backdrop-filter: blur(20px); 
+    background: rgba(5,5,5,0.96); 
+    backdrop-filter: blur(16px); 
+    -webkit-backdrop-filter: blur(16px);
     z-index: 10000; 
     display: flex; 
     flex-direction: column;
@@ -142,14 +157,14 @@
     position: relative;
     max-width: 85vw;
     max-height: 70vh;
-    border-radius: 14px;
-    border: 3px solid #ff0000; 
-    box-shadow: 0 0 35px rgba(255, 0, 0, 0.5), 0 25px 60px rgba(0,0,0,0.8);
+    border-radius: 16px;
+    border: 2px solid rgba(220, 38, 38, 0.4); 
+    box-shadow: 0 0 40px rgba(220, 38, 38, 0.25), 0 30px 70px rgba(0,0,0,0.9);
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #111;
+    background: #0d0d0d;
   }
 
   .lightbox-content { 
@@ -159,20 +174,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease, filter 0.4s ease;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s ease, filter 0.35s ease;
   }
   
-  /* شكل الماوس على هيئة علامة زائد (+) صريحة ومميزة عند عملية الزوم */
   .lightbox-content.zooming,
   .lightbox-content.zooming .lightbox-img {
     cursor: cell !important;
   }
   
-  /* أنيميشن التنقل */
-  .slide-out-left { transform: translateX(-100px) scale(0.95); opacity: 0; filter: blur(20px); }
-  .slide-out-right { transform: translateX(100px) scale(0.95); opacity: 0; filter: blur(20px); }
-  .slide-in-left { transform: translateX(-100px) scale(0.95); opacity: 0; filter: blur(20px); }
-  .slide-in-right { transform: translateX(100px) scale(0.95); opacity: 0; filter: blur(20px); }
+  /* أنيميشن التنقل الذكي والسلس */
+  .slide-out-left { transform: translateX(-60px) scale(0.95); opacity: 0; filter: blur(10px); }
+  .slide-out-right { transform: translateX(60px) scale(0.95); opacity: 0; filter: blur(10px); }
+  .slide-in-left { transform: translateX(-60px) scale(0.95); opacity: 0; filter: blur(10px); }
+  .slide-in-right { transform: translateX(60px) scale(0.95); opacity: 0; filter: blur(10px); }
 
   .lightbox-img { 
     max-width: 100%; 
@@ -183,77 +197,77 @@
     -webkit-user-drag: none;
   }
 
-  /* عدسة المكبر المحدثة */
+  /* عدسة المكبر الدائرية */
   .img-magnifier-glass {
     position: fixed; 
-    border: 3px solid #ff0000;
+    border: 2px solid var(--red);
     border-radius: 50%;
-    width: 180px; 
-    height: 180px; 
-    box-shadow: 0 0 20px rgba(255,0,0,0.6), inset 0 0 15px rgba(0,0,0,0.6);
+    width: 200px; 
+    height: 200px; 
+    box-shadow: 0 0 25px rgba(220,38,38,0.5), inset 0 0 20px rgba(0,0,0,0.7);
     display: none; 
     pointer-events: none; 
     z-index: 10010;
   }
   
-  /* شريط التحكم السفلي المدمج */
+  /* شريط التحكم السفلي بتصميم مستوحى من تطبيقات الميوزك */
   .lightbox-controls {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
-    margin-top: 25px;
+    gap: 24px;
+    margin-top: 30px;
     z-index: 10005;
-    background: rgba(0,0,0,0.75);
-    padding: 8px 25px;
+    background: rgba(15,15,15,0.85);
+    padding: 10px 30px;
     border-radius: 40px;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.05);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   .lightbox-nav { 
     background: none;
     border: none;
-    color: #fff; 
-    font-size: 1.2rem;
-    width: 40px;
-    height: 40px;
+    color: var(--g400); 
+    font-size: 1.1rem;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all var(--transition);
   }
-  .lightbox-nav:hover { background: #ff0000; color: #fff; box-shadow: 0 0 15px rgba(255,0,0,0.6); }
+  .lightbox-nav:hover { background: var(--red); color: #fff; box-shadow: 0 0 15px var(--red-glow); transform: scale(1.05); }
   
   .lightbox-close-btn {
     background: none;
     border: none;
-    color: rgba(255,255,255,0.6);
-    font-size: 1.2rem;
-    width: 40px;
-    height: 40px;
+    color: var(--g500);
+    font-size: 1.1rem;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all var(--transition);
     margin-left: 10px;
-    border-left: 1px solid rgba(255,255,255,0.1);
-    padding-left: 15px;
+    border-left: 1px solid rgba(255,255,255,0.08);
+    padding-left: 20px;
   }
-  .lightbox-close-btn:hover { color: #ff0000; transform: scale(1.1); }
+  .lightbox-close-btn:hover { color: var(--red); transform: scale(1.1) rotate(90deg); }
 
   .lightbox-cat {
     color: #fff;
-    font-size: 0.95rem;
-    font-weight: 800;
+    font-size: 0.85rem;
+    font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    min-width: 110px;
+    min-width: 130px;
     text-align: center;
   }
 </style>
@@ -263,13 +277,13 @@
 <section class="section sdark">
   <div class="container">
     
-    <div class="sheader reveal active">
+    <div class="sheader">
       <div class="badge"><span class="bdl"></span><span class="bt">Portfolio</span></div>
       <h2 class="stitle">DESIGNS BUILT TO<br><span>GO VIRAL</span></h2>
       <p class="ssub">Scroll through my best work — thumbnails, GFX, and banners that actually get clicks.</p>
     </div>
 
-    <div class="filter-wrapper reveal active">
+    <div class="filter-wrapper">
       <button class="filter-btn active" data-filter="all">All Projects</button>
       <button class="filter-btn" data-filter="Thumbnail">Thumbnails</button>
       <button class="filter-btn" data-filter="GFX">GFX</button>
@@ -298,6 +312,7 @@
 
 @push('scripts')
 <script>
+  // قاعدة البيانات الأساسية للمشاريع - تم إصلاح الخطأ البرمجي في السطر الأخير
   const rawPortfolio = [
       { cat:'Thumbnail', img:'https://i.postimg.cc/0jkbGp7Y/TUMBNAIL-1.webp', title:'Epic Battle Layout', isNew: false },
       { cat:'GFX', img:'https://i.postimg.cc/mkLt3Q7H/GFX-1.webp', title:'Cyber GFX Edition', isNew: true }, 
@@ -311,21 +326,23 @@
       { cat:'GFX', img:'https://i.postimg.cc/Vvfd9jX9/GFX-4.webp', title:'Galactic Space Banner', isNew: false }
   ];
 
+  // خلط عشوائي للمشاريع عند أول تحميل لتظهر الصفحة متجددة دائماً
   const shuffledPortfolio = [...rawPortfolio].sort(() => Math.random() - 0.5);
   const grid = document.getElementById('portfolioGrid');
   let activeItems = [...shuffledPortfolio];
   let currentLightboxIdx = 0;
 
+  // الحساب المتقدم لتوزيع الميسونري (Masonry Layout Grid)
   function layoutMasonry() {
     const items = grid.getElementsByClassName('portfolio-item');
     if(items.length === 0) return;
 
-    const gap = 16;
+    const gap = 20;
     const gridWidth = grid.offsetWidth;
     
     let columnsCount = 3;
-    if (gridWidth < 600) columnsCount = 1;
-    else if (gridWidth < 992) columnsCount = 2;
+    if (gridWidth < 650) columnsCount = 1;
+    else if (gridWidth < 1000) columnsCount = 2;
 
     const columnWidth = (gridWidth - (gap * (columnsCount - 1))) / columnsCount;
     const columnHeights = Array(columnsCount).fill(0);
@@ -342,21 +359,30 @@
       
       columnHeights[minColumnIdx] += item.offsetHeight + gap;
 
-      setTimeout(() => { item.classList.add('show-pop'); }, 50);
+      // تأثير الظهور التفاعلي المتدرج
+      setTimeout(() => { item.classList.add('show-pop'); }, 60);
     });
 
     grid.style.height = `${Math.max(...columnHeights) - gap}px`;
   }
 
+  // توليد كروت المشاريع بالـ DOM بشكل حي
   function renderGrid(itemsToRender) {
     grid.innerHTML = '';
     itemsToRender.forEach((item, index) => {
       const el = document.createElement('div');
       el.className = `portfolio-item`; 
       
-      let badgeHTML = item.isNew ? `<div class="badge-new">New!</div>` : '';
+      let badgeHTML = item.isNew ? `<div class="badge-new">New</div>` : '';
       
-      el.innerHTML = `${badgeHTML}<img src="${item.img}" alt="${item.cat}" draggable="false"><div class="portfolio-overlay"><div class="item-cat">${item.cat}</div></div>`;
+      el.innerHTML = `
+        ${badgeHTML}
+        <img src="${item.img}" alt="${item.title}" draggable="false">
+        <div class="portfolio-overlay">
+          <div class="item-cat">${item.cat}</div>
+          <div class="item-title">${item.title}</div>
+        </div>
+      `;
       
       el.querySelector('img').addEventListener('load', layoutMasonry);
       el.addEventListener('click', () => openLightbox(index));
@@ -365,25 +391,40 @@
     setTimeout(layoutMasonry, 100);
   }
   
+  // التشغيل المبدئي للجريد
   renderGrid(shuffledPortfolio);
   window.addEventListener('resize', layoutMasonry);
+  window.addEventListener('load', layoutMasonry); // إضافة لضمان الأبعاد عند البناء المحلي
 
+  // أنيميشن الفلترة التفاعلي (مثل نظام الفئات في سبوتيفاي)
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      document.querySelector('.filter-btn.active').classList.remove('active');
+      const activeBtn = document.querySelector('.filter-btn.active');
+      if (activeBtn) activeBtn.classList.remove('active');
+      
       e.target.classList.add('active');
       const filter = e.target.getAttribute('data-filter');
-      activeItems = filter === 'all' ? [...shuffledPortfolio] : shuffledPortfolio.filter(i => i.cat === filter);
-      renderGrid(activeItems);
+      
+      // إخفاء العناصر أولاً بسلاسة قبل الفلترة
+      const items = grid.getElementsByClassName('portfolio-item');
+      Array.from(items).forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'scale(0.9) translateY(10px)';
+        item.style.filter = 'blur(10px)';
+      });
+
+      setTimeout(() => {
+        activeItems = filter === 'all' ? [...shuffledPortfolio] : shuffledPortfolio.filter(i => i.cat === filter);
+        renderGrid(activeItems);
+      }, 300); // الانتظار حتى ينتهي أنيميشن الاختفاء
     });
   });
 
-  /* البوب أب والتحكم */
+  /* نظام البوب أب والـ Lightbox المطور */
   const modal = document.getElementById('lightboxModal');
   const modalImg = document.getElementById('lightboxImg');
   const modalContent = document.getElementById('lightboxContent');
   const modalCat = document.getElementById('lightboxCat');
-  
   let glass; 
 
   function openLightbox(idx) { 
@@ -391,12 +432,12 @@
     destroyMagnifier();
     
     modalImg.src = activeItems[currentLightboxIdx].img; 
-    modalCat.textContent = activeItems[currentLightboxIdx].cat;
+    modalCat.textContent = activeItems[currentLightboxIdx].cat + " — " + (currentLightboxIdx + 1) + "/" + activeItems.length;
     
     modalContent.className = "lightbox-content"; 
     modal.classList.add('active'); 
     
-    setTimeout(() => { initMagnifier(modalImg, 1.8); }, 150); 
+    setTimeout(() => { initMagnifier(modalImg, 2); }, 200); 
   }
 
   function navigateLightbox(direction) {
@@ -406,38 +447,46 @@
       modalContent.classList.add('slide-out-left');
       setTimeout(() => {
         currentLightboxIdx = (currentLightboxIdx + 1) % activeItems.length;
-        modalImg.src = activeItems[currentLightboxIdx].img;
-        modalCat.textContent = activeItems[currentLightboxIdx].cat;
+        updateModalData();
         modalContent.className = 'lightbox-content slide-in-right';
-        
-        setTimeout(() => { 
-          modalContent.className = 'lightbox-content'; 
-          initMagnifier(modalImg, 1.8);
-        }, 50);
-      }, 300);
+        setTimeout(() => { finishNavigation(); }, 50);
+      }, 250);
       
     } else {
       modalContent.classList.add('slide-out-right');
       setTimeout(() => {
         currentLightboxIdx = (currentLightboxIdx - 1 + activeItems.length) % activeItems.length;
-        modalImg.src = activeItems[currentLightboxIdx].img;
-        modalCat.textContent = activeItems[currentLightboxIdx].cat;
+        updateModalData();
         modalContent.className = 'lightbox-content slide-in-left';
-        
-        setTimeout(() => { 
-          modalContent.className = 'lightbox-content'; 
-          initMagnifier(modalImg, 1.8);
-        }, 50);
-      }, 300);
+        setTimeout(() => { finishNavigation(); }, 50);
+      }, 250);
     }
   }
 
+  function updateModalData() {
+    modalImg.src = activeItems[currentLightboxIdx].img;
+    modalCat.textContent = activeItems[currentLightboxIdx].cat + " — " + (currentLightboxIdx + 1) + "/" + activeItems.length;
+  }
+
+  function finishNavigation() {
+    modalContent.className = 'lightbox-content'; 
+    initMagnifier(modalImg, 2);
+  }
+
+  // أحداث أزرار التحكم والكي بورد للتنقل السريع
   document.getElementById('lightboxNext').addEventListener('click', () => navigateLightbox('next'));
   document.getElementById('lightboxPrev').addEventListener('click', () => navigateLightbox('prev'));
   document.getElementById('lightboxClose').addEventListener('click', () => { modal.classList.remove('active'); destroyMagnifier(); });
   modal.addEventListener('click', (e) => { if(e.target === modal) { modal.classList.remove('active'); destroyMagnifier(); } });
 
-  /* نظام السنترة المطلق للعدسة مع مؤشر الماوس المتغير إلى (+) بشكل ثابت */
+  document.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('active')) return;
+    if (e.key === 'ArrowRight') navigateLightbox('next');
+    if (e.key === 'ArrowLeft') navigateLightbox('prev');
+    if (e.key === 'Escape') { modal.classList.remove('active'); destroyMagnifier(); }
+  });
+
+  /* عدسة التكبير الاحترافية متوافقة مع الماوس واللمس */
   function initMagnifier(img, zoom) {
     let isZooming = false;
     
@@ -452,9 +501,9 @@
     window.addEventListener("mouseup", () => { stopZoom(); });
     img.parentElement.addEventListener("mousemove", (e) => { if (isZooming) moveMagnifier(e); });
     
-    img.parentElement.addEventListener("touchstart", (e) => { startZoom(e); });
+    img.parentElement.addEventListener("touchstart", (e) => { startZoom(e); }, {passive: false});
     window.addEventListener("touchend", () => { stopZoom(); });
-    img.parentElement.addEventListener("touchmove", (e) => { if (isZooming) moveMagnifier(e); });
+    img.parentElement.addEventListener("touchmove", (e) => { if (isZooming) moveMagnifier(e); }, {passive: false});
 
     function startZoom(e) {
       isZooming = true;
@@ -474,7 +523,6 @@
       
       const imgWidth = img.offsetWidth;
       const imgHeight = img.offsetHeight;
-
       glass.style.backgroundSize = (imgWidth * zoom) + "px " + (imgHeight * zoom) + "px";
 
       let clientX = 0, clientY = 0;
@@ -486,12 +534,10 @@
         clientY = e.clientY;
       }
 
-      // حساب منصف الدائرة هندسياً بدقة متناهية
       const glassRect = glass.getBoundingClientRect();
       const w = glassRect.width / 2;
       const h = glassRect.height / 2;
 
-      // وضع مركز عدسة التكبير تحت رأس كورسور الـ (+) تماماً وبدون أي انزياح
       glass.style.left = (clientX - w) + "px";
       glass.style.top = (clientY - h) + "px";
       

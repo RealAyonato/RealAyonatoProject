@@ -43,6 +43,7 @@
     padding: 50px;
     position: relative;
     backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     box-shadow: 0 40px 80px rgba(0, 0, 0, 0.95), inset 0 1px 1px rgba(255, 255, 255, 0.05);
     display: flex;
     flex-direction: column;
@@ -85,7 +86,7 @@
     50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.6)); }
   }
 
-  /* تحديث الخط هنا ليكون ناعماً وعصرياً تماماً وبدون أي ضخامة */
+  /* تنسيق خط الفقرة التوضيحية */
   .statement-paragraph {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important; 
     font-size: 1.1rem;
@@ -104,7 +105,7 @@
     text-transform: none !important;
   }
 
-  /* زر ديسكورد بحروف طبيعية وانسيابية */
+  /* زر ديسكورد التفاعلي */
   .vector-action-btn {
     display: inline-flex;
     align-items: center;
@@ -113,7 +114,7 @@
     color: #ffffff !important;
     padding: 15px 38px;
     border-radius: 12px;
-    font-weight: 400; 
+    font-weight: 500; 
     font-size: 1rem;
     font-family: var(--fb);
     text-transform: none !important; 
@@ -161,6 +162,7 @@
     justify-content: space-between;
     text-decoration: none;
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
   }
@@ -198,7 +200,6 @@
     transition: all 0.3s ease;
   }
 
-  /* أسماء المنصات كالسابق تماماً */
   .stack-info h4 {
     font-family: var(--fb);
     font-size: 0.85rem;
@@ -209,7 +210,6 @@
     margin-bottom: 2px;
   }
 
-  /* تحديث خط اليوزر هنا ليكون ناعماً ورقيقاً جداً ومتناسقاً مع حالة الأحرف */
   .stack-info p {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important; 
     font-size: 0.95rem;
@@ -246,9 +246,9 @@
     filter: drop-shadow(0 0 5px var(--neon-glow));
   }
 
-  /* التوافق مع الشاشات الصغيرة */
+  /* التوافق مع الشاشات الصغيرة والمتوسطة */
   @media (max-width: 950px) {
-    .motion-contact-grid { grid-template-columns: 1fr; gap: 25px; }
+    .motion-contact-grid { grid-template-columns: 1fr; gap: 25px; margin: 40px auto 60px; }
     .discord-cinema-panel { padding: 45px 24px; align-items: center; text-align: center; }
     .statement-paragraph { text-align: center; font-size: 1.05rem; }
     .vector-action-btn { width: 100%; justify-content: center; }
@@ -269,7 +269,6 @@
     <div class="motion-contact-grid reveal active">
       
       <div class="card discord-cinema-panel">
-        
         <div class="discord-panel-logo">
           <i class="fab fa-discord"></i>
         </div>
