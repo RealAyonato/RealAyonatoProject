@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'My Portfolio — RealAyonato')
+@section('title', 'Portfolio | RealAyonato')
 
 @push('styles')
 <style>

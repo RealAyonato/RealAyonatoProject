@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Services & Packages — RealAyonato')
+@section('title', 'Services | RealAyonato')
 
 {{-- أيقونات الخلفية المتوافقة تماماً مع باقات الأسعار --}}
 @section('bg_icons')
@@ -208,7 +208,7 @@
   <div class="container">
 
     <div class="sheader reveal active">
-      <div class="badge"><span class="bdl"></span><span class="bt">Services & Rates</span></div>
+      <div class="badge"><span class="bdl"></span><span class="bt">Services</span></div>
       <h2 class="stitle">Fair Prices.<br><span>Serious Quality.</span></h2>
       <p class="ssub">Choose from standalone services or save more with value-packed bundles — all built for Roblox creators.</p>
     </div>

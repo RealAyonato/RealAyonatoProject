@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>@yield('title', 'RealAyonato.art — Roblox Visual Portfolio')</title>
+<title>@yield('title', 'RealAyonato')</title>
 <link rel="icon" href="https://i.postimg.cc/qqJzc822/logo.webp">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">

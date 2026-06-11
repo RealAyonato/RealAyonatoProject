@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'FAQ — RealAyonato')
+@section('title', 'FAQ | RealAyonato')
 
 {{-- أيقونات الخلفية التفاعلية المخصصة لقسم الأسئلة الشائعة --}}
 @section('bg_icons')

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Feedback — RealAyonato')
+@section('title', 'Feedback | RealAyonato')
 
 {{-- أيقونات الخلفية المتوافقة مع التقييمات --}}
 @section('bg_icons')

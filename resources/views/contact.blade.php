@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Contact — RealAyonato')
+@section('title', 'Contact | RealAyonato')
 
 {{-- أيقونات الخلفية التفاعلية المخصصة لقسم اتصل بنا --}}
 @section('bg_icons')
