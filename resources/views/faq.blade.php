@@ -14,6 +14,11 @@
   .section {
     position: relative;
     z-index: 2;
+    /* منع تحديد النصوص أو نسخها في كامل قسم الأسئلة الشائعة */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
   }
 
   /* حاوية الأسئلة الشائعة */
@@ -117,6 +122,13 @@
     box-shadow: 0 0 12px var(--red-glow); 
   }
 
+  /* منع تفاعل وسحب الأيقونات أو الصور التعبيرية */
+  img, svg, i {
+    pointer-events: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+  }
+
   /* ريسبونسيف للشاشات الصغيرة */
   @media(max-width: 576px) {
     .faq-trigger { padding: 18px 20px; font-size: 1rem; gap: 12px; }
@@ -144,57 +156,74 @@
 
 @push('scripts')
 <script>
-  const faqData = [
-    { q: 'What exactly do you create?', a: 'I make Roblox thumbnails, GFX profile pictures, and channel banners — all built with 3D rendering and custom effects. Basically anything visual for your Roblox channel, I can build it.' },
-    { q: 'How long will my order take?', a: 'Most orders are done within 6 to 48 hours. For bundles, I deliver each asset one by one so nothing feels rushed. Need it faster? Just mention your deadline when you order.' },
-    { q: 'How do revisions work?', a: 'Every service includes a set number of free revisions. Need more? You can add extra rounds for $2 each — I want you to be 100% happy with the result.' },
-    { q: 'What information do you need to get started?', a: 'Your Roblox username, a description of what you want, any references or examples, your color preferences, and your deadline. The more detail you share, the better the final result.' },
-    { q: 'How do I pay?', a: 'I accept PayPal and Ko-fi. Once we lock in the details, you pay and I get started right away — straightforward and no hassle.' },
-    { q: 'Do you offer refunds?', a: 'Due to the custom nature of the work, I don\'t offer refunds once the design process has started. However, I\'ll work with you through revisions until you\'re satisfied.' },
-    { q: 'Can I use the designs commercially?', a: 'Yes — once delivered and paid for, the designs are fully yours to use on YouTube, Roblox, or anywhere else.' },
-    { q: 'Can you match my existing style or branding?', a: 'Absolutely. Just send over examples of your current visuals and I\'ll make sure everything stays consistent with your brand.' },
-    { q: 'Do returning clients get any perks?', a: 'Yes! Repeat clients get priority in the queue and occasional discounts — just mention it\'s not your first order.' },
-    { q: 'How do I place an order?', a: 'Head over to my Discord, open a ticket, and talk to me directly. That\'s where all orders are handled — fastest way to get started.' }
-  ];
+  (function() {
+    const faqData = [
+      { q: 'What exactly do you create?', a: 'I make Roblox thumbnails, GFX profile pictures, and channel banners — all built with 3D rendering and custom effects. Basically anything visual for your Roblox channel, I can build it.' },
+      { q: 'How long will my order take?', a: 'Most orders are done within 6 to 48 hours. For bundles, I deliver each asset one by one so nothing feels rushed. Need it faster? Just mention your deadline when you order.' },
+      { q: 'How do revisions work?', a: 'Every service includes a set number of free revisions. Need more? You can add extra rounds for $2 each — I want you to be 100% happy with the result.' },
+      { q: 'What information do you need to get started?', a: 'Your Roblox username, a description of what you want, any references or examples, your color preferences, and your deadline. The more detail you share, the better the final result.' },
+      { q: 'How do I pay?', a: 'I accept PayPal and Ko-fi. Once we lock in the details, you pay and I get started right away — straightforward and no hassle.' },
+      { q: 'Do you offer refunds?', a: 'Due to the custom nature of the work, I don\'t offer refunds once the design process has started. However, I\'ll work with you through revisions until you\'re satisfied.' },
+      { q: 'Can I use the designs commercially?', a: 'Yes — once delivered and paid for, the designs are fully yours to use on YouTube, Roblox, or anywhere else.' },
+      { q: 'Can you match my existing style or branding?', a: 'Absolutely. Just send over examples of your current visuals and I\'ll make sure everything stays consistent with your brand.' },
+      { q: 'Do returning clients get any perks?', a: 'Yes! Repeat clients get priority in the queue and occasional discounts — just mention it\'s not your first order.' },
+      { q: 'How do I place an order?', a: 'Head over to my Discord, open a ticket, and talk to me directly. That\'s where all orders are handled — fastest way to get started.' }
+    ];
 
-  const wrap = document.getElementById('faqWrap');
-  
-  faqData.forEach(f => {
-    const card = document.createElement('div'); 
-    card.className = 'faq-card';
-    card.innerHTML = `
-      <button class="faq-trigger">
-        <span>${f.q}</span> 
-        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
-      </button>
-      <div class="faq-content">
-        <div class="faq-inner">${f.a}</div>
-      </div>
-    `;
+    const wrap = document.getElementById('faqWrap');
     
-    wrap.appendChild(card);
-    
-    card.querySelector('.faq-trigger').addEventListener('click', function() {
-      const isActive = card.classList.contains('active');
+    faqData.forEach(f => {
+      const card = document.createElement('div'); 
+      card.className = 'faq-card';
+      card.innerHTML = `
+        <button class="faq-trigger">
+          <span>${f.q}</span> 
+          <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+        </button>
+        <div class="faq-content">
+          <div class="faq-inner">${f.a}</div>
+        </div>
+      `;
       
-      // إغلاق أي كارت مفتوح مسبقاً بطريقة ناعمة وسلسة
-      document.querySelectorAll('.faq-card').forEach(c => { 
-        if (c !== card) {
-          c.classList.remove('active'); 
-          c.querySelector('.faq-content').style.maxHeight = null; 
+      wrap.appendChild(card);
+      
+      card.querySelector('.faq-trigger').addEventListener('click', function() {
+        const isActive = card.classList.contains('active');
+        
+        // إغلاق أي كارت مفتوح مسبقاً بطريقة ناعمة وسلسة
+        document.querySelectorAll('.faq-card').forEach(c => { 
+          if (c !== card) {
+            c.classList.remove('active'); 
+            c.querySelector('.faq-content').style.maxHeight = null; 
+          }
+        });
+        
+        // تبديل حالة الكارت الذي تم الضغط عليه حالياً
+        if (isActive) {
+          card.classList.remove('active');
+          card.querySelector('.faq-content').style.maxHeight = null;
+        } else {
+          card.classList.add('active');
+          const content = card.querySelector('.faq-content'); 
+          content.style.maxHeight = content.scrollHeight + "px"; 
         }
       });
-      
-      // تبديل حالة الكارت الذي تم الضغط عليه حالياً
-      if (isActive) {
-        card.classList.remove('active');
-        card.querySelector('.faq-content').style.maxHeight = null;
-      } else {
-        card.classList.add('active');
-        const content = card.querySelector('.faq-content'); 
-        content.style.maxHeight = content.scrollHeight + "px"; 
-      }
     });
-  });
+
+    // جدار الحماية لمنع الـ Right-Click على الصفحة بالكامل
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+    // حماية الأيقونات والصور والـ SVGs من السحب العشوائي
+    document.querySelectorAll('img, svg, i').forEach(el => {
+      el.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+      });
+      el.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+    });
+  })();
 </script>
 @endpush

@@ -38,7 +38,6 @@
     color: #fff;
   }
   
-  /* تحسين تأثير الجليتش لمنع اهتزاز وكسر النصوص */
   .glitch {
     font-family: 'Arial Black', sans-serif;
     color: #ff4d4d; 
@@ -109,7 +108,6 @@
     font-weight: 500;
   }
   
-  /* تنسيق الأزرار والمؤثرات التفاعلية حولها */
   .hero-btn-wrapper {
     position: relative;
     width: 100%;
@@ -200,7 +198,6 @@
     width: 100%;
   }
 
-  /* حاوية الـ Avatar والهالات المضيئة */
   .av-wrap { 
     display: flex; 
     justify-content: flex-end; 
@@ -252,12 +249,16 @@
     position: relative;
     z-index: 2;
   }
+
+  /* حماية الصور عبر الـ CSS ومنع التحديد أو التحميل بالحفظ المطول */
   .av-ring img { 
     width: 100%; 
     height: 100%; 
     object-fit: cover;
+    pointer-events: none; /* تمنع أي تفاعل مباشر أو سحب للأسفل */
     -webkit-user-drag: none; 
     user-select: none;
+    -webkit-touch-callout: none; /* تمنع ظهور قائمة الحفظ على هواتف الآيفون والأندرويد */
   }
   
   .hero-dynamic-text { 
@@ -308,7 +309,6 @@
     50% { transform: scale(-1) translate(8px, 8px); opacity: 1; }
   }
 
-  /* الريسبونسيف للشاشات المتوسطة والصغيرة */
   @media (max-width: 992px) { 
     #home { height: auto; padding: 60px 0; }
     .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 45px; } 
@@ -462,8 +462,17 @@
       }
     });
 
+    // جدار الحماية البرمجي: منع فتح القائمة بزر الفأرة الأيمن ومنع سحب الصور تماماً
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
     document.querySelectorAll('img').forEach(img => {
       img.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+      });
+      // إضافي للهواتف الذكية لمنع ظهور قائمة الحفظ عند الضغط المطول
+      img.addEventListener('contextmenu', function(e) {
         e.preventDefault();
       });
     });

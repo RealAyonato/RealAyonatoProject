@@ -14,6 +14,11 @@
   .section {
     position: relative;
     z-index: 2;
+    /* منع تحديد النصوص أو نسخها في كامل قسم الآراء */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
   }
 
   /* قسم الإحصائيات */
@@ -93,6 +98,8 @@
   }
 
   .rev-user { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+  
+  /* حماية الصور الرمزية من السحب أو الحفظ المطول */
   .rev-avatar { 
     width: 54px; 
     height: 54px; 
@@ -100,6 +107,9 @@
     border: 2px solid rgba(255, 255, 255, 0.08); 
     transition: all 0.3s ease;
     object-fit: cover;
+    pointer-events: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
   }
   .review-card:hover .rev-avatar {
     border-color: var(--red);
@@ -309,22 +319,37 @@
 
 @push('scripts')
 <script>
-  document.getElementById('btnLoadMore').addEventListener('click', function() {
-    const hiddenReviews = document.querySelectorAll('.hidden-review');
-    
-    hiddenReviews.forEach((review, index) => {
-      // إظهار العنصر في شجرة الـ DOM أولاً لتهيئة المساحة المخصصة له
-      review.style.display = 'flex';
+  (function() {
+    // إدارة سلوك زر "Show More Reviews"
+    document.getElementById('btnLoadMore').addEventListener('click', function() {
+      const hiddenReviews = document.querySelectorAll('.hidden-review');
       
-      // توقيت متتابع متناهي الصغر لعمل تأثير تدرج حركي رهيب (Staggered Animation)
-      setTimeout(() => {
-        review.style.opacity = '1';
-        review.style.transform = 'translateY(0)';
-      }, index * 80); 
+      hiddenReviews.forEach((review, index) => {
+        review.style.display = 'flex';
+        
+        setTimeout(() => {
+          review.style.opacity = '1';
+          review.style.transform = 'translateY(0)';
+        }, index * 80); 
+      });
+
+      document.getElementById('loadMoreContainer').style.display = 'none';
     });
 
-    // إخفاء حاوية الزر تماماً بعد استعراض كافة الآراء
-    document.getElementById('loadMoreContainer').style.display = 'none';
-  });
+    // جدار حماية لمنع الـ Right-Click على كامل محتوى الصفحة
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+    // منع حركات السحب والإفلات والضغط المطول على الصور للتحميل
+    document.querySelectorAll('img').forEach(img => {
+      img.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+      });
+      img.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+    });
+  })();
 </script>
 @endpush

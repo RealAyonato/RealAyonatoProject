@@ -143,6 +143,8 @@
     filter: drop-shadow(0 0 15px rgba(220, 38, 38, 0.7));
     animation: fireFloat 2s infinite ease-in-out;
     pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
   }
   @keyframes fireFloat {
     0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
@@ -203,6 +205,14 @@
   }
   .extra-revisions-bar strong { color: #fff; font-family: var(--fb); }
   .extra-revisions-bar .highlight-price { color: var(--red); font-weight: 900; font-family: var(--fd); font-size: 1.2rem; margin: 0 2px; }
+
+  /* منع سحب أو تفاعل عناصر الصور بالكامل عبر CSS */
+  img, svg {
+    pointer-events: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
 
   /* ريسبونسيف كامل للشاشات الذكية والهواتف */
   @media(max-width: 768px) {
@@ -334,3 +344,24 @@
   </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+  (function() {
+    // جدار حماية لتعطيل الـ Context Menu الافتراضي (Right-Click) على كامل الصفحة
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+    // منع سحب وحفظ الصور ورموز الـ SVG حتى للهواتف المحمولة
+    document.querySelectorAll('img, svg').forEach(el => {
+      el.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+      });
+      el.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+    });
+  })();
+</script>
+@endpush

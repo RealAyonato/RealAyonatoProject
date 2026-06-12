@@ -55,7 +55,7 @@
     -ms-overflow-style: none;
   }
 
-  /* منطقة الاستشعار الخلفية - ممتدة تماماً لأقصى اليمين وبدون أي فراغات */
+  /* منطقة الاستشعار الخلفية */
   .custom-scrollbar-track {
     position: fixed;
     top: 0;
@@ -67,7 +67,7 @@
     user-select: none;
   }
   
-  /* مقبض الشريط المخصص - ملتصق تماماً بالحافة اليمنى 0 بكسل */
+  /* مقبض الشريط المخصص */
   .custom-scrollbar-thumb {
     position: absolute;
     top: 0;
@@ -75,13 +75,12 @@
     width: 8px;
     height: 50px; 
     background: rgba(255, 255, 255, 0.25);
-    border-radius: 4px 0 0 4px; /* انحناء جهة اليسار فقط ليبقى ملتصقاً باليمين */
+    border-radius: 4px 0 0 4px;
     cursor: pointer;
     will-change: transform, height;
     transition: width 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
   }
   
-  /* تأثير التوهج المضيء الفخم عند التفاعل */
   .custom-scrollbar-track:hover .custom-scrollbar-thumb, .custom-scrollbar-track.dragging .custom-scrollbar-thumb {
     width: 10px;
     background-color: var(--red);
@@ -105,9 +104,17 @@
   @keyframes ldBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
   /* Top Header */
-  .top-header { padding: 24px 0; position: relative; z-index: 100; background: linear-gradient(to bottom, rgba(10,10,10,0.8), transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); position: sticky; top: 0; }
+  .top-header { padding: 24px 0; position: sticky; top: 0; z-index: 100; background: linear-gradient(to bottom, rgba(10,10,10,0.8), transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
   .top-header-in { display: flex; justify-content: space-between; align-items: center; width: 100%; }
   
+  /* حماية ومنع نسخ الـ Navbar والـ Burger Menu */
+  .top-header, .mobile-burger-btn, .pop-nav-menu {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
   .who-am-i-btn { 
     display: inline-flex;
     align-items: center;
@@ -158,6 +165,85 @@
   .top-nav-links a.active-page { color: var(--white) !important; font-weight: 900; }
   .top-nav-links a.active-page::after, .top-nav-links a:hover::after { width: 100%; }
 
+  /* زر البورجر للموبايل */
+  .mobile-burger-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+    transition: color var(--transition);
+    z-index: 1010;
+  }
+  .mobile-burger-btn:hover {
+    color: var(--red);
+  }
+
+  /* واجهة الـ Pop-up الزجاجية الفاخرة المخصصة للموبايل */
+  .pop-nav-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 5, 5, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .pop-nav-menu.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .pop-close-btn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: none;
+    border: none;
+    color: var(--g400);
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  .pop-close-btn:hover {
+    color: var(--red);
+    transform: rotate(90deg);
+  }
+  .pop-links-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+    transform: translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .pop-nav-menu.open .pop-links-wrapper {
+    transform: translateY(0);
+  }
+  .pop-links-wrapper a {
+    font-family: var(--fd);
+    font-size: 2.5rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--g400);
+    text-decoration: none;
+    transition: all var(--transition);
+    position: relative;
+  }
+  .pop-links-wrapper a:hover, .pop-links-wrapper a.active-page {
+    color: var(--white);
+    text-shadow: 0 0 15px var(--red-glow);
+    transform: scale(1.05);
+  }
+
   /* Floating Icons */
   .bg-icon { position: fixed; pointer-events: none; z-index: 0; color: transparent; -webkit-text-stroke: 1.5px rgba(220,38,38,0.2); animation: floatEmj var(--dur, 16s) var(--delay, 0s) infinite ease-in-out; }
   @keyframes floatEmj { 0% { transform: translateY(0px) rotate(-8deg); } 25% { transform: translateY(-30px) rotate(5deg); } 50% { transform: translateY(-52px) rotate(-4deg); } 75% { transform: translateY(-24px) rotate(7deg); } 100% { transform: translateY(0px) rotate(-8deg); } }
@@ -199,10 +285,12 @@
   .foot-soc { color: var(--g400); font-size: 1.25rem; transition: all 0.25s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
   .foot-soc:hover { color: var(--white) !important; transform: translateY(-3px) scale(1.1); filter: drop-shadow(0 0 5px var(--red)); }
 
+  /* استعلامات الميديا المحسنة والمطورة بالكامل لشاشات الهواتف والتابلت */
   @media (max-width: 768px) {
-    .top-header { position: relative; padding: 16px 0; }
-    .top-header-in { flex-direction: column; gap: 18px; text-align: center; }
-    .top-nav-links { margin: 0 auto; gap: 16px; flex-wrap: wrap; justify-content: center; }
+    .top-header { padding: 20px 0; }
+    .top-header-in { flex-direction: row; justify-content: space-between; align-items: center; text-align: left; }
+    .top-nav-links { display: none !important; } /* إخفاء الأقسام العادية في شاشات الجوال */
+    .mobile-burger-btn { display: block; } /* إظهار زر البروجر في الزاوية اليمنى */
     .foot-in { flex-direction: column; text-align: center; gap: 24px; }
     .custom-scrollbar-track { display: none !important; } 
   }
@@ -231,6 +319,7 @@
       <span>Who Am I ?</span>
     </a>
 
+    {{-- القائمة المكتبية لسطح المكتب --}}
     <div class="top-nav-links">
       <a href="{{ url('/portfolio') }}" class="{{ request()->is('portfolio') ? 'active-page' : '' }}">Portfolio</a>
       <a href="{{ url('/service') }}" class="{{ request()->is('service') ? 'active-page' : '' }}">Services</a>
@@ -239,6 +328,25 @@
       <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'active-page' : '' }}">Contact</a>
     </div>
 
+    {{-- زر الهامبرغر - يظهر في الهاتف فقط وفي الزاوية اليمنى تماماً --}}
+    <button class="mobile-burger-btn" id="burgerBtn" aria-label="Open Navigation Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+
+  </div>
+</div>
+
+{{-- نافذة الـ Pop-up المنبثقة بكامل الشاشة مع تأثير البلور للموبايل --}}
+<div class="pop-nav-menu" id="popNavMenu">
+  <button class="pop-close-btn" id="popCloseBtn" aria-label="Close Navigation Menu">
+    <i class="fas fa-times"></i>
+  </button>
+  <div class="pop-links-wrapper">
+    <a href="{{ url('/portfolio') }}" class="{{ request()->is('portfolio') ? 'active-page' : '' }}">Portfolio</a>
+    <a href="{{ url('/service') }}" class="{{ request()->is('service') ? 'active-page' : '' }}">Services</a>
+    <a href="{{ url('/feedback') }}" class="{{ request()->is('feedback') ? 'active-page' : '' }}">Feedback</a>
+    <a href="{{ url('/faq') }}" class="{{ request()->is('faq') ? 'active-page' : '' }}">FAQ</a>
+    <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'active-page' : '' }}">Contact</a>
   </div>
 </div>
 @endif
@@ -296,8 +404,32 @@
     document.getElementById('yr').textContent = new Date().getFullYear();
   })();
 
-  // محرك التمرير عالي الحساسية والاستجابة من الحافة الفورية 0px
+  // دالة التحكم بفتح وإغلاق قائمة الـ Burger Menu المنبثقة
   document.addEventListener("DOMContentLoaded", () => {
+    const burgerBtn = document.getElementById("burgerBtn");
+    const popCloseBtn = document.getElementById("popCloseBtn");
+    const popNavMenu = document.getElementById("popNavMenu");
+
+    if (burgerBtn && popNavMenu && popCloseBtn) {
+      burgerBtn.addEventListener("click", () => {
+        popNavMenu.classList.add("open");
+        document.body.style.overflow = "hidden"; // منع التمرير الخلفي عند فتح القائمة
+      });
+
+      const closeMenu = () => {
+        popNavMenu.classList.remove("open");
+        document.body.style.overflow = ""; // إعادة التمرير لوضعه الطبيعي
+      };
+
+      popCloseBtn.addEventListener("click", closeMenu);
+
+      // إغلاق القائمة تلقائياً في حال الضغط على أي رابط داخلها
+      popNavMenu.querySelectorAll(".pop-links-wrapper a").forEach(link => {
+        link.addEventListener("click", closeMenu);
+      });
+    }
+
+    // محرك التمرير عالي الحساسية والاستجابة من الحافة الفورية 0px
     const track = document.getElementById("scrollTrack");
     const thumb = document.getElementById("scrollThumb");
     if (!track || !thumb) return;
@@ -335,7 +467,6 @@
       }
     }
 
-    // تفعيل الضغط الفوري بمجرد النقر على النطاق الجانبي بالكامل
     thumb.addEventListener("mousedown", (e) => {
       isDragging = true;
       startY = e.clientY;

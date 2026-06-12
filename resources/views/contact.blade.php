@@ -21,6 +21,7 @@
     position: relative;
     z-index: 2;
     overflow: hidden;
+    /* ملاحظة: تم إزالة قيود الـ user-select هنا للسماح للمستخدم بتحديد النصوص ونسخها بحرية */
   }
 
   /* حاوية العرض الديناميكية المحترفة */
@@ -34,7 +35,7 @@
   }
 
   /* ==========================================
-     لوحة محرك ديسكورد السينمائية
+      لوحة محرك ديسكورد السينمائية
      ========================================== */
   .discord-cinema-panel {
     background: linear-gradient(135deg, rgba(16, 10, 10, 0.85) 0%, rgba(5, 5, 5, 0.9) 100%) !important;
@@ -144,7 +145,7 @@
   .vector-action-btn:hover .arrow-pack i:nth-child(2) { transform: translateX(3px); }
 
   /* ==========================================
-     العمود الجانبي للمنصات الأخرى
+      العمود الجانبي للمنصات الأخرى
      ========================================== */
   .motion-side-stack {
     display: flex;
@@ -244,6 +245,12 @@
     color: var(--neon-red);
     transform: translateX(4px);
     filter: drop-shadow(0 0 5px var(--neon-glow));
+  }
+
+  /* منع سحب الأيقونات لحمايتها من السحب العشوائي بالماوس */
+  img, svg, i {
+    pointer-events: none;
+    -webkit-user-drag: none;
   }
 
   /* التوافق مع الشاشات الصغيرة والمتوسطة */
@@ -347,3 +354,24 @@
   </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+  (function() {
+    // جدار الحماية لتعطيل الـ Right-Click فقط على كامل الصفحة لحمايتها
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+    // منع الحفظ أو الـ Right-Click المباشر المخصص للأيقونات والعناصر الرسومية فقط
+    document.querySelectorAll('img, svg, i').forEach(el => {
+      el.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+      });
+      el.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+    });
+  })();
+</script>
+@endpush
