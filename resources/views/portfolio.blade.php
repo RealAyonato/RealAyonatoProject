@@ -14,6 +14,14 @@
     z-index: 2;
   }
 
+  /* منع وتثبيط نسخ النصوص أو تحديدها نهائياً لحماية عناصر المعرض */
+  .section.sdark, .filter-wrapper, .portfolio-grid, .lightbox-modal {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
   .sheader .badge {
     display: inline-flex;
     align-items: center;
@@ -101,7 +109,7 @@
   .portfolio-overlay { 
     position: absolute; 
     inset: 0; 
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0) 100%); 
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0) 100%); 
     display: flex; 
     flex-direction: column; 
     justify-content: flex-end; 
@@ -114,24 +122,16 @@
   .portfolio-item:hover .portfolio-overlay { opacity: 1; }
   
   .item-cat { 
-    font-size: 0.85rem; 
+    font-size: 1rem; 
     font-weight: 900; 
     text-transform: uppercase; 
-    color: var(--red); 
-    letter-spacing: 2px; 
+    color: var(--white); 
+    text-shadow: 0 0 10px var(--red-glow);
+    letter-spacing: 3px; 
     transform: translateY(10px);
     transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   }
-  .item-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #fff;
-    margin-top: 4px;
-    transform: translateY(10px);
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1) 0.05s;
-  }
-  .portfolio-item:hover .item-cat,
-  .portfolio-item:hover .item-title { transform: translateY(0); }
+  .portfolio-item:hover .item-cat { transform: translateY(0); }
 
   /* ------------------------------------------ */
   /* المودال والـ Lightbox المطور */
@@ -312,21 +312,21 @@
 
 @push('scripts')
 <script>
-  // قاعدة البيانات الأساسية للمشاريع - تم إصلاح الخطأ البرمجي في السطر الأخير
+  // قاعدة البيانات الأساسية للمشاريع - تم إبقاء أنواع البيانات فقط وحذف خانات العنوان (title)
   const rawPortfolio = [
-      { cat:'Thumbnail', img:'https://i.postimg.cc/0jkbGp7Y/TUMBNAIL-1.webp', title:'Epic Battle Layout', isNew: false },
-      { cat:'GFX', img:'https://i.postimg.cc/mkLt3Q7H/GFX-1.webp', title:'Cyber GFX Edition', isNew: true }, 
-      { cat:'Banner', img:'https://i.postimg.cc/G2J4sMTk/BANNER-1.webp', title:'Channel Header Art', isNew: false },
-      { cat:'Thumbnail', img:'https://i.postimg.cc/sxjvPp5J/TUMBNAIL-2.webp', title:'Speed Demon Graphics', isNew: true }, 
-      { cat:'GFX', img:'https://i.postimg.cc/fyzJ7xYS/GFX-2.webp', title:'Mystic Character Concept', isNew: false },
-      { cat:'Banner', img:'https://i.postimg.cc/sxjvPp5B/BANNER-2.webp', title:'Dark Fantasy Layout', isNew: false },
-      { cat:'Thumbnail', img:'https://i.postimg.cc/PJXPbm14/TUMBNAIL-3.webp', title:'Neon Velocity Theme', isNew: false },
-      { cat:'GFX', img:'https://i.postimg.cc/XqjpKw9G/GFX-3.webp', title:'Royal Identity GFX', isNew: false },
-      { cat:'Thumbnail', img:'https://i.postimg.cc/BbSX5x2p/TUMBNAIL-4.webp', title:'Blaze Stream Design', isNew: true }, 
-      { cat:'GFX', img:'https://i.postimg.cc/Vvfd9jX9/GFX-4.webp', title:'Galactic Space Banner', isNew: false }
+      { cat:'Thumbnail', img:'https://i.postimg.cc/0jkbGp7Y/TUMBNAIL-1.webp', isNew: false },
+      { cat:'GFX', img:'https://i.postimg.cc/mkLt3Q7H/GFX-1.webp', isNew: true }, 
+      { cat:'Banner', img:'https://i.postimg.cc/G2J4sMTk/BANNER-1.webp', isNew: false },
+      { cat:'Thumbnail', img:'https://i.postimg.cc/sxjvPp5J/TUMBNAIL-2.webp', isNew: true }, 
+      { cat:'GFX', img:'https://i.postimg.cc/fyzJ7xYS/GFX-2.webp', isNew: false },
+      { cat:'Banner', img:'https://i.postimg.cc/sxjvPp5B/BANNER-2.webp', isNew: false },
+      { cat:'Thumbnail', img:'https://i.postimg.cc/PJXPbm14/TUMBNAIL-3.webp', isNew: false },
+      { cat:'GFX', img:'https://i.postimg.cc/XqjpKw9G/GFX-3.webp', isNew: false },
+      { cat:'Thumbnail', img:'https://i.postimg.cc/BbSX5x2p/TUMBNAIL-4.webp', isNew: true }, 
+      { cat:'GFX', img:'https://i.postimg.cc/Vvfd9jX9/GFX-4.webp', isNew: false }
   ];
 
-  // خلط عشوائي للمشاريع عند أول تحميل لتظهر الصفحة متجددة دائماً
+  // خلط عشوائي للمشاريع عند أول تحميل
   const shuffledPortfolio = [...rawPortfolio].sort(() => Math.random() - 0.5);
   const grid = document.getElementById('portfolioGrid');
   let activeItems = [...shuffledPortfolio];
@@ -366,7 +366,7 @@
     grid.style.height = `${Math.max(...columnHeights) - gap}px`;
   }
 
-  // توليد كروت المشاريع بالـ DOM بشكل حي
+  // توليد كروت المشاريع بالـ DOM بشكل حي - تظهر الفئة فقط بدون عنوان نصي
   function renderGrid(itemsToRender) {
     grid.innerHTML = '';
     itemsToRender.forEach((item, index) => {
@@ -377,10 +377,9 @@
       
       el.innerHTML = `
         ${badgeHTML}
-        <img src="${item.img}" alt="${item.title}" draggable="false">
+        <img src="${item.img}" alt="${item.cat}" draggable="false">
         <div class="portfolio-overlay">
           <div class="item-cat">${item.cat}</div>
-          <div class="item-title">${item.title}</div>
         </div>
       `;
       
@@ -394,9 +393,9 @@
   // التشغيل المبدئي للجريد
   renderGrid(shuffledPortfolio);
   window.addEventListener('resize', layoutMasonry);
-  window.addEventListener('load', layoutMasonry); // إضافة لضمان الأبعاد عند البناء المحلي
+  window.addEventListener('load', layoutMasonry);
 
-  // أنيميشن الفلترة التفاعلي (مثل نظام الفئات في سبوتيفاي)
+  // أنيميشن الفلترة التفاعلي
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const activeBtn = document.querySelector('.filter-btn.active');
@@ -405,7 +404,6 @@
       e.target.classList.add('active');
       const filter = e.target.getAttribute('data-filter');
       
-      // إخفاء العناصر أولاً بسلاسة قبل الفلترة
       const items = grid.getElementsByClassName('portfolio-item');
       Array.from(items).forEach(item => {
         item.style.opacity = '0';
@@ -416,7 +414,7 @@
       setTimeout(() => {
         activeItems = filter === 'all' ? [...shuffledPortfolio] : shuffledPortfolio.filter(i => i.cat === filter);
         renderGrid(activeItems);
-      }, 300); // الانتظار حتى ينتهي أنيميشن الاختفاء
+      }, 300);
     });
   });
 
@@ -473,7 +471,6 @@
     initMagnifier(modalImg, 2);
   }
 
-  // أحداث أزرار التحكم والكي بورد للتنقل السريع
   document.getElementById('lightboxNext').addEventListener('click', () => navigateLightbox('next'));
   document.getElementById('lightboxPrev').addEventListener('click', () => navigateLightbox('prev'));
   document.getElementById('lightboxClose').addEventListener('click', () => { modal.classList.remove('active'); destroyMagnifier(); });
