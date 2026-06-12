@@ -11,7 +11,13 @@
 
 @push('styles')
 <style>
-  .section { position: relative; z-index: 2; }
+  /* إصلاح الفراغ العلوي وضمان التصاق النوافذ */
+  .section { 
+    position: relative; 
+    z-index: 2; 
+    margin-top: 0 !important;
+    padding-top: 30px !important; /* تقليل الحشو العلوي لمنع حدوث الفراغ الأسود */
+  }
 
   /* عناوين الأقسام الفرعية المحدثة */
   .sub-section-title {
@@ -86,6 +92,8 @@
     gap: 32px; 
     max-width: 1080px; 
     margin: 0 auto; 
+    position: relative;
+    z-index: 1;
   }
   .price-card { 
     padding: 55px 32px 45px; 

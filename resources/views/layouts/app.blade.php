@@ -5,19 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>@yield('title', 'RealAyonato')</title>
 
-<link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="shortcut icon" href="/favicon.ico">
+<link class="js-fav" rel="icon" type="image/x-icon" href="/favicon.ico">
+<link class="js-fav" rel="shortcut icon" href="/favicon.ico">
+
+@php
+    $currentPath = request()->path();
+    $coverImage = asset('hero_cover.jpg'); 
+
+    if ($currentPath === 'portfolio') {
+        $coverImage = asset('portfolio_cover.jpg');
+    } elseif ($currentPath === 'service' || $currentPath === 'services') {
+        $coverImage = asset('services_cover.jpg');
+    } elseif ($currentPath === 'feedback') {
+        $coverImage = asset('feedback_cover.jpg');
+    } elseif ($currentPath === 'faq') {
+        $coverImage = asset('faq_cover.jpg');
+    } elseif ($currentPath === 'contact') {
+        $coverImage = asset('contact_cover.jpg');
+    }
+@endphp
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ url()->current() }}">
 <meta property="og:title" content="@yield('meta_title', 'RealAyonato')">
-<meta property="og:description" content="@yield('meta_description', 'Explore my official portfolio featuring GFX designs, Roblox UI interfaces, and visual arts.')">
-<meta property="og:image" content="@yield('meta_image', 'https://realayonato.art/favicon.ico')">
+<meta property="og:description" content="@yield('meta_description', 'Premium Roblox GFX and thumbnails by RealAyonato. Designed to stop the scroll.')">
+<meta property="og:image" content="@yield('meta_image', $coverImage)">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="@yield('meta_title', 'RealAyonato — Roblox Visual Portfolio')">
 <meta name="twitter:description" content="@yield('meta_description', 'Explore my official portfolio featuring GFX designs, Roblox UI interfaces, and visual arts.')">
-<meta name="twitter:image" content="@yield('meta_image', 'https://realayonato.art/favicon.ico')">
+<meta name="twitter:image" content="@yield('meta_image', $coverImage)">
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -36,18 +53,25 @@
     height: 100%;
   }
   
+  /* قفل السكرول الصارم أثناء التحميل */
+  html.loading-active, body.loading-active {
+    overflow: hidden !important;
+    height: 100% !important;
+  }
+  
   body { 
     background: var(--bg); color: var(--white); font-family: var(--fb); line-height: 1.6; overflow-x: hidden; 
     background-image: radial-gradient(circle at 75% 35%, rgba(220,38,38,0.05) 0%, transparent 55%);
     background-attachment: fixed;
     height: 100%;
+    padding-top: 85px; 
   }
   body::before {
     content: ''; position: fixed; inset: 0; opacity: 0.025; pointer-events: none; z-index: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* إخفاء شريط المتصفح الافتراضي */
+  /* إخفاء شريط المتصفح الافتراضي الأصلي */
   html::-webkit-scrollbar, body::-webkit-scrollbar {
     display: none;
     width: 0 !important;
@@ -57,7 +81,7 @@
     -ms-overflow-style: none;
   }
 
-  /* منطقة الاستشعار الخلفية */
+  /* منطقة الاستشعار الخلفية للشريط المخصص */
   .custom-scrollbar-track {
     position: fixed;
     top: 0;
@@ -65,8 +89,9 @@
     width: 10px;
     height: 100%;
     background: transparent;
-    z-index: 999999;
+    z-index: 999999999; 
     user-select: none;
+    display: none; /* يظهر فقط عبر الـ JS بعد التحميل */
   }
   
   /* مقبض الشريط المخصص */
@@ -96,7 +121,7 @@
   }
 
   /* Loading Screen */
-  #loading { position: fixed; inset: 0; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.55s ease; }
+  #loading { position: fixed; inset: 0; background: #000; z-index: 99999999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.55s ease; }
   #loading.gone { opacity: 0; pointer-events: none; visibility: hidden; }
   .ld-logo { width: 72px; height: 72px; border-radius: 50%; border: 3px solid #dc2626; animation: ldPulse 1.2s ease-in-out infinite; margin-bottom: 20px; }
   @keyframes ldPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,.4); } 70% { box-shadow: 0 0 0 16px rgba(220,38,38,0); } }
@@ -105,11 +130,23 @@
   .ld-cursor-bar { display: inline-block; width: 3px; height: 0.75em; background: #dc2626; margin-left: 3px; vertical-align: middle; animation: ldBlink 0.7s step-end infinite; }
   @keyframes ldBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-  /* Top Header */
-  .top-header { padding: 24px 0; position: sticky; top: 0; z-index: 100; background: linear-gradient(to bottom, rgba(10,10,10,0.8), transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  /* الهيدر الثابت الملتصق بالأعلى */
+  .top-header { 
+    padding: 24px 0; 
+    position: fixed !important; 
+    top: 0 !important; 
+    left: 0 !important;
+    right: 0 !important;
+    width: 100%;
+    margin: 0 !important;
+    z-index: 9999999 !important; 
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), rgba(10,10,10,0.75)) !important; 
+    backdrop-filter: blur(14px) !important; 
+    -webkit-backdrop-filter: blur(14px) !important; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  }
   .top-header-in { display: flex; justify-content: space-between; align-items: center; width: 100%; }
   
-  /* حماية ومنع نسخ الـ Navbar والـ Burger Menu */
   .top-header, .mobile-burger-btn, .pop-nav-menu {
     user-select: none;
     -webkit-user-select: none;
@@ -167,7 +204,6 @@
   .top-nav-links a.active-page { color: var(--white) !important; font-weight: 900; }
   .top-nav-links a.active-page::after, .top-nav-links a:hover::after { width: 100%; }
 
-  /* زر البورجر للموبايل */
   .mobile-burger-btn {
     display: none;
     background: none;
@@ -177,20 +213,17 @@
     cursor: pointer;
     padding: 8px;
     transition: color var(--transition);
-    z-index: 1010;
+    z-index: 10000000 !important;
   }
-  .mobile-burger-btn:hover {
-    color: var(--red);
-  }
+  .mobile-burger-btn:hover { color: var(--red); }
 
-  /* واجهة الـ Pop-up الزجاجية الفاخرة المخصصة للموبايل */
   .pop-nav-menu {
     position: fixed;
     inset: 0;
     background: rgba(5, 5, 5, 0.75);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    z-index: 1000;
+    z-index: 10000001 !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -199,10 +232,7 @@
     pointer-events: none;
     transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   }
-  .pop-nav-menu.open {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  .pop-nav-menu.open { opacity: 1; pointer-events: auto; }
   .pop-close-btn {
     position: absolute;
     top: 24px;
@@ -214,10 +244,7 @@
     cursor: pointer;
     transition: color 0.3s ease, transform 0.3s ease;
   }
-  .pop-close-btn:hover {
-    color: var(--red);
-    transform: rotate(90deg);
-  }
+  .pop-close-btn:hover { color: var(--red); transform: rotate(90deg); }
   .pop-links-wrapper {
     display: flex;
     flex-direction: column;
@@ -226,9 +253,7 @@
     transform: translateY(20px);
     transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   }
-  .pop-nav-menu.open .pop-links-wrapper {
-    transform: translateY(0);
-  }
+  .pop-nav-menu.open .pop-links-wrapper { transform: translateY(0); }
   .pop-links-wrapper a {
     font-family: var(--fd);
     font-size: 2.5rem;
@@ -246,13 +271,11 @@
     transform: scale(1.05);
   }
 
-  /* Floating Icons */
   .bg-icon { position: fixed; pointer-events: none; z-index: 0; color: transparent; -webkit-text-stroke: 1.5px rgba(220,38,38,0.2); animation: floatEmj var(--dur, 16s) var(--delay, 0s) infinite ease-in-out; }
   @keyframes floatEmj { 0% { transform: translateY(0px) rotate(-8deg); } 25% { transform: translateY(-30px) rotate(5deg); } 50% { transform: translateY(-52px) rotate(-4deg); } 75% { transform: translateY(-24px) rotate(7deg); } 100% { transform: translateY(0px) rotate(-8deg); } }
 
-  /* Global Section Styles */
   .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
-  .section { padding: 60px 0 90px; position: relative; z-index: 1; }
+  .section { padding: 40px 0 90px; position: relative; z-index: 1; }
   .sdark { background: rgba(11, 11, 11, 0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.03); }
   
   .badge { display: inline-flex; align-items: center; gap: 8px; color: var(--red); margin-bottom: 14px; }
@@ -287,21 +310,25 @@
   .foot-soc { color: var(--g400); font-size: 1.25rem; transition: all 0.25s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
   .foot-soc:hover { color: var(--white) !important; transform: translateY(-3px) scale(1.1); filter: drop-shadow(0 0 5px var(--red)); }
 
-  /* استعلامات الميديا المحسنة والمطورة بالكامل لشاشات الهواتف والتابلت */
   @media (max-width: 768px) {
-    .top-header { padding: 20px 0; }
+    body { padding-top: 75px; }
+    .top-header { padding: 16px 0; }
     .top-header-in { flex-direction: row; justify-content: space-between; align-items: center; text-align: left; }
-    .top-nav-links { display: none !important; } /* إخفاء الأقسام العادية في شاشات الجوال */
-    .mobile-burger-btn { display: block; } /* إظهار زر البروجر في الزاوية اليمنى */
+    .top-nav-links { display: none !important; } 
+    .mobile-burger-btn { display: block; } 
     .foot-in { flex-direction: column; text-align: center; gap: 24px; }
     .custom-scrollbar-track { display: none !important; } 
   }
 </style>
+<script>
+  // تفعيل قفل السكرول الصارم فوراً قبل بناء شجرة الـ DOM لمنع أي نزول مفاجئ
+  document.documentElement.classList.add('loading-active');
+</script>
 @stack('styles')
 </head>
-<body>
+<body class="loading-active">
 
-{{-- شريط التمرير المخصص المحاذي 100% لأقصى يمين الشاشة --}}
+{{-- شريط التمرير المخصص --}}
 <div class="custom-scrollbar-track" id="scrollTrack">
   <div class="custom-scrollbar-thumb" id="scrollThumb"></div>
 </div>
@@ -321,7 +348,6 @@
       <span>Who Am I ?</span>
     </a>
 
-    {{-- القائمة المكتبية لسطح المكتب --}}
     <div class="top-nav-links">
       <a href="{{ url('/portfolio') }}" class="{{ request()->is('portfolio') ? 'active-page' : '' }}">Portfolio</a>
       <a href="{{ url('/service') }}" class="{{ request()->is('service') ? 'active-page' : '' }}">Services</a>
@@ -330,7 +356,6 @@
       <a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'active-page' : '' }}">Contact</a>
     </div>
 
-    {{-- زر الهامبرغر - يظهر في الهاتف فقط وفي الزاوية اليمنى تماماً --}}
     <button class="mobile-burger-btn" id="burgerBtn" aria-label="Open Navigation Menu">
       <i class="fas fa-bars"></i>
     </button>
@@ -338,7 +363,6 @@
   </div>
 </div>
 
-{{-- نافذة الـ Pop-up المنبثقة بكامل الشاشة مع تأثير البلور للموبايل --}}
 <div class="pop-nav-menu" id="popNavMenu">
   <button class="pop-close-btn" id="popCloseBtn" aria-label="Close Navigation Menu">
     <i class="fas fa-times"></i>
@@ -379,18 +403,41 @@
 </footer>
 
 <script>
+  // مصفوفة وظائف ستنفذ فور تفعيل شريط التمرير المخصص
+  let globalTriggerScrollUpdate = function() {};
+
   (function() {
     const ld = document.getElementById('loading');
     const wordDiv = document.getElementById('ld-word');
     const cursor = wordDiv.querySelector('.ld-cursor-bar');
+    const track = document.getElementById("scrollTrack");
     const nameChars = [['R','#fff'],['e','#fff'],['a','#fff'],['l','#fff'],['A','#dc2626'],['y','#dc2626'],['o','#dc2626'],['n','#dc2626'],['a','#dc2626'],['t','#dc2626'],['o','#dc2626']];
     let idx = 0;
     
+    // إرجاع النافذة لـ 0 مجدداً بشكل صارم قبل أي معالجة بصرية
+    window.scrollTo(0, 0);
+
     function addChar() {
       if (idx >= nameChars.length) {
         const dot = document.querySelector('.ld-dot');
         if(dot) dot.style.opacity = '1';
-        setTimeout(() => { if(ld) ld.classList.add('gone'); setTimeout(() => { if(ld) ld.remove(); }, 550); }, 400);
+        
+        setTimeout(() => { 
+          if(ld) ld.classList.add('gone'); 
+          
+          // فتح السكرول وإصلاح مشكلة الحسابات المغلوطة
+          document.documentElement.classList.remove('loading-active');
+          document.body.classList.remove('loading-active');
+          
+          if(track && window.innerWidth > 768) {
+            track.style.display = "block";
+          }
+
+          // استدعاء دالة تحديث الحجم فوراً بعد انتهاء شاشة التحميل للحصول على الطول المثالي
+          globalTriggerScrollUpdate();
+
+          setTimeout(() => { if(ld) ld.remove(); }, 550); 
+        }, 400);
         return;
       }
       if(wordDiv && cursor) {
@@ -406,7 +453,6 @@
     document.getElementById('yr').textContent = new Date().getFullYear();
   })();
 
-  // دالة التحكم بفتح وإغلاق قائمة الـ Burger Menu المنبثقة
   document.addEventListener("DOMContentLoaded", () => {
     const burgerBtn = document.getElementById("burgerBtn");
     const popCloseBtn = document.getElementById("popCloseBtn");
@@ -415,23 +461,22 @@
     if (burgerBtn && popNavMenu && popCloseBtn) {
       burgerBtn.addEventListener("click", () => {
         popNavMenu.classList.add("open");
-        document.body.style.overflow = "hidden"; // منع التمرير الخلفي عند فتح القائمة
+        document.body.style.overflow = "hidden"; 
       });
 
       const closeMenu = () => {
         popNavMenu.classList.remove("open");
-        document.body.style.overflow = ""; // إعادة التمرير لوضعه الطبيعي
+        if(!document.body.classList.contains('loading-active')) {
+          document.body.style.overflow = ""; 
+        }
       };
 
       popCloseBtn.addEventListener("click", closeMenu);
-
-      // إغلاق القائمة تلقائياً في حال الضغط على أي رابط داخلها
       popNavMenu.querySelectorAll(".pop-links-wrapper a").forEach(link => {
         link.addEventListener("click", closeMenu);
       });
     }
 
-    // محرك التمرير عالي الحساسية والاستجابة من الحافة الفورية 0px
     const track = document.getElementById("scrollTrack");
     const thumb = document.getElementById("scrollThumb");
     if (!track || !thumb) return;
@@ -442,10 +487,14 @@
     let ticked = false;
 
     function updateScrollbar() {
+      // إيقاف المعالجة إذا كان المستخدم لا يزال عالقاً في شاشة التحميل
+      if (document.body.classList.contains('loading-active')) return;
+
       const windowHeight = window.innerHeight;
       const docHeight = document.documentElement.scrollHeight;
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
+      // حساب الارتفاع بنسبة وتناسب دقيق جداً ليعبر عن أبعاد الموقع الفعلية
       const thumbHeight = Math.max((windowHeight / docHeight) * windowHeight, 60);
       thumb.style.height = `${thumbHeight}px`;
 
@@ -455,12 +504,17 @@
       if (maxScrollTop > 0) {
         const thumbTop = (scrollTop / maxScrollTop) * maxTrackTop;
         thumb.style.transform = `translate3d(0, ${thumbTop}px, 0)`;
-        track.style.display = "block";
+        if(window.innerWidth > 768) track.style.display = "block";
       } else {
         track.style.display = "none";
       }
       ticked = false;
     }
+
+    // تصدير الدالة لتشغيلها بشكل خارجي عند إغلاق شاشة التحميل
+    globalTriggerScrollUpdate = function() {
+      updateScrollbar();
+    };
 
     function requestTick() {
       if (!ticked) {
@@ -470,6 +524,7 @@
     }
 
     thumb.addEventListener("mousedown", (e) => {
+      if (document.body.classList.contains('loading-active')) return;
       isDragging = true;
       startY = e.clientY;
       startScrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -494,7 +549,6 @@
       const safeThumbTop = Math.max(0, Math.min(currentThumbTop, maxTrackTop));
 
       const targetScrollTop = (safeThumbTop / maxTrackTop) * maxScrollTop;
-      
       window.scrollTo(0, targetScrollTop);
     });
 
@@ -511,8 +565,6 @@
     
     const resizeObserver = new ResizeObserver(() => requestTick());
     resizeObserver.observe(document.body);
-
-    requestTick();
   });
 </script>
 @stack('scripts')
