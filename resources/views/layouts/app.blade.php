@@ -8,7 +8,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ url()->current() }}">
-<meta property="og:title" content="@yield('meta_title', 'RealAyonato — Roblox Visual Portfolio')">
+<meta property="og:title" content="@yield('meta_title', 'RealAyonato')">
 <meta property="og:description" content="@yield('meta_description', 'Explore my official portfolio featuring GFX designs, Roblox UI interfaces, and visual arts.')">
 <meta property="og:image" content="@yield('meta_image', 'https://i.postimg.cc/qqJzc822/logo.webp')">
 
